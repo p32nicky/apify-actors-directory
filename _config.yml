@@ -1,0 +1,39 @@
+title: "API Finder — Best Web Scraping & Automation Tools"
+description: "Directory of 26,000+ APIs, scrapers, and automation tools. Find the perfect tool for lead generation, social media scraping, e-commerce monitoring, and more."
+url: "https://p32nicky.github.io"
+baseurl: "/apify-actors-directory"
+# No theme — custom layouts in _layouts/
+
+permalink: /blog/:title/
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "page"
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+google_analytics:
+
+exclude:
+  - reddit-apify-poster.js
+  - devto-poster.js
+  - scrape_apify.js
+  - generate-site-pages.js
+  - .devto-poster-state.json
+  - .reddit-poster-state.json
+  - node_modules
+  - "*.js"
+  - "*.json"
+  - Gemfile
+  - Gemfile.lock

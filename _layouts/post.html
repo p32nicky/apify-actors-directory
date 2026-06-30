@@ -1,0 +1,17 @@
+---
+layout: default
+---
+<article class="article-content">
+  <h1>{{ page.title }}</h1>
+  <p class="post-meta">{{ page.date | date: "%B %d, %Y" }} {% if page.tags %}• {{ page.tags | join: ", " }}{% endif %}</p>
+
+  {{ content }}
+
+  <hr>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px;margin:32px 0;text-align:center;">
+    <p style="font-size:1.1rem;margin-bottom:12px;"><strong>Try these tools yourself — Apify gives every new account $5 in free credits.</strong></p>
+    <a href="https://www.apify.com/?fpr=97nrp4" class="cta-btn">Start Free on Apify</a>
+  </div>
+
+  <p style="margin-top:24px;"><a href="{{ '/blog/' | relative_url }}">← Back to all articles</a></p>
+</article>
