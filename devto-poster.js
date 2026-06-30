@@ -11,6 +11,7 @@ const APIFY_SIGNUP = `https://www.apify.com/?fpr=${AFFILIATE_ID}`;
 const POSTS_PER_RUN = 2;
 const DELAY_BETWEEN_POSTS = 310000; // 5+ min to respect rate limit
 const STATE_FILE = path.join(__dirname, '.devto-poster-state.json');
+const POSTS_DIR = path.join(__dirname, '_posts');
 
 // ─── Article templates ────────────────────────────────────────────────────────
 
@@ -431,6 +432,38 @@ async function generateArticle(state) {
   }
 }
 
+// ─── Jekyll post ─────────────────────────────────────────────────────────────
+
+function saveJekyllPost(article) {
+  const today = new Date().toISOString().split('T')[0];
+  const slug = article.title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .substring(0, 80);
+  const filename = `${today}-${slug}.md`;
+  const filepath = path.join(POSTS_DIR, filename);
+
+  if (fs.existsSync(filepath)) return null;
+
+  const tags = (article.tags || []).map(t => `"${t}"`).join(', ');
+  const content = `---
+layout: post
+title: "${article.title.replace(/"/g, '\\"')}"
+date: ${today}
+tags: [${tags}]
+description: "${article.title.replace(/"/g, '\\"')}"
+---
+
+${article.body}
+`;
+
+  if (!fs.existsSync(POSTS_DIR)) fs.mkdirSync(POSTS_DIR, { recursive: true });
+  fs.writeFileSync(filepath, content);
+  console.log(`Saved Jekyll post: _posts/${filename}`);
+  return filename;
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main() {
@@ -452,6 +485,8 @@ async function main() {
     console.log(`Title: ${article.title}`);
     console.log(`Tags: ${article.tags.join(', ')}`);
     console.log(`Series: ${article.series}`);
+
+    saveJekyllPost(article);
 
     if (dryRun) {
       console.log(`\n--- Preview ---\n${article.body.substring(0, 400)}...\n--- End Preview ---`);
