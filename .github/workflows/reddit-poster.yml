@@ -1,0 +1,35 @@
+name: Reddit Auto-Poster
+
+on:
+  schedule:
+    - cron: '0 14 * * *'  # 10 AM ET (UTC-4)
+  workflow_dispatch:       # manual trigger from GitHub UI
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Restore state from previous runs
+      - name: Restore poster state
+        uses: actions/cache@v4
+        with:
+          path: .reddit-poster-state.json
+          key: reddit-poster-state-${{ github.run_number }}
+          restore-keys: |
+            reddit-poster-state-
+
+      - name: Post to Reddit
+        env:
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
+          REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
+          REDDIT_SUBREDDIT: API_Finder
+          APIFY_AFFILIATE_ID: '97nrp4'
+        run: node reddit-apify-poster.js --count=5
