@@ -1,0 +1,31 @@
+name: Dev.to Article Poster
+
+on:
+  schedule:
+    - cron: '0 15 * * *'  # 11 AM ET (UTC-4), 1 hour after Reddit poster
+  workflow_dispatch:
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Restore poster state
+        uses: actions/cache@v4
+        with:
+          path: .devto-poster-state.json
+          key: devto-poster-state-${{ github.run_number }}
+          restore-keys: |
+            devto-poster-state-
+
+      - name: Publish articles
+        env:
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+          APIFY_AFFILIATE_ID: '97nrp4'
+        run: node devto-poster.js --count=2
