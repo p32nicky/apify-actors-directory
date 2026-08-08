@@ -68,7 +68,7 @@ const POST_TYPES = {
           `| **Pricing** | ${pricing} |\n` +
           `| **Categories** | ${cats || 'General'} |\n` +
           `| **Actor** | ${actorPath} |\n\n` +
-          `Search for **${actorPath}** on Apify to try it out.\n\n` +
+          `**[Try ${actor.title} on Apify](https://apify.com/${actorPath}?fpr=${AFFILIATE_ID})**\n\n` +
           `---\n\n` +
           `*Browse 26,000+ more APIs and scrapers in our [full directory on GitHub](${GITHUB_REPO}).*`,
         commentLink: `https://apify.com/${actorPath}?fpr=${AFFILIATE_ID}`
@@ -95,8 +95,8 @@ const POST_TYPES = {
       });
 
       body += `\n---\n\n`;
-      body += `All of these are available on Apify — just search by name.\n\n`;
-      body += `*Want more? Browse all ${displayCat} tools and 26,000+ others in our [full directory on GitHub](${GITHUB_REPO}/blob/master/categories/${catFile}.md).*`;
+      body += `**[Browse all ${displayCat} tools on Apify](https://apify.com/store?category=${category}&fpr=${AFFILIATE_ID})**\n\n`;
+      body += `*Want more? See all 26,000+ tools in our [full directory on GitHub](${GITHUB_REPO}/blob/master/categories/${catFile}.md).*`;
 
       return {
         title: `Top 10 ${displayCat} APIs & Scrapers — Most Popular Tools Right Now`,
@@ -127,7 +127,7 @@ const POST_TYPES = {
         body += `| ${i + 1} | **${title}** | ${dev} | ${rating} | ${users} |\n`;
       });
 
-      body += `\nAll available on Apify — search by name to get started. Every new account also gets $5/month in free credits for paid tools.\n\n`;
+      body += `\n**[Sign up for Apify](https://www.apify.com/?fpr=${AFFILIATE_ID})** — every new account gets $5/month in free credits.\n\n`;
       body += `---\n\n`;
       body += `*Full directory: [26,000+ tools on GitHub](${GITHUB_REPO})*`;
 
@@ -162,7 +162,7 @@ const POST_TYPES = {
         body += `| **${title}** | ${dev} | ${rating} | ${users} | ${pricing} |\n`;
       });
 
-      body += `\nAll available on Apify — search by name to try them.\n\n`;
+      body += `\n**[Try these tools on Apify](https://www.apify.com/?fpr=${AFFILIATE_ID})** — $5 free credits for new accounts.\n\n`;
       body += `---\n\n`;
       body += `*Browse all tools in our [full directory of 26,000+ actors on GitHub](${GITHUB_REPO}).*`;
 
@@ -191,9 +191,9 @@ const AL_POST_TYPES = {
           `| **Format** | JSON |\n` +
           `| **Free Tier** | Yes |\n` +
           `| **Platform** | APILayer (40+ APIs, one key) |\n\n` +
-          `Search for **${product.name}** on APILayer to try it out.\n\n` +
+          `**[Try ${product.name} free](${product.url}?fpr=${APILAYER_AFFILIATE_ID})**\n\n` +
           `---\n\n` +
-          `*Part of [APILayer](https://apilayer.com) — 40+ production-ready APIs under one account.*`,
+          `*Part of [APILayer](${APILAYER_SIGNUP}) — 40+ production-ready APIs under one account.*`,
         commentLink: `${product.url}?fpr=${APILAYER_AFFILIATE_ID}`
       };
     }
