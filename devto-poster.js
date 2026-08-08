@@ -5,8 +5,27 @@ const path = require('path');
 // ─── Config ───────────────────────────────────────────────────────────────────
 const DEVTO_API_KEY = process.env.DEVTO_API_KEY || '';
 const AFFILIATE_ID = process.env.APIFY_AFFILIATE_ID || '97nrp4';
+const APILAYER_AFFILIATE_ID = process.env.APILAYER_AFFILIATE_ID || 'nick77';
 const GITHUB_REPO = 'https://github.com/p32nicky/apify-actors-directory';
 const APIFY_SIGNUP = `https://www.apify.com/?fpr=${AFFILIATE_ID}`;
+const APILAYER_SIGNUP = `https://apilayer.com?fpr=${APILAYER_AFFILIATE_ID}`;
+
+// ─── APILayer product catalog ────────────────────────────────────────────────
+const APILAYER_PRODUCTS = [
+  { name: 'IPStack', slug: 'ipstack', category: 'Geolocation', url: 'https://ipstack.com', tagline: 'Locate and identify website visitors by IP address', desc: 'Real-time IP geolocation API with 100+ data fields including location, ISP, timezone, currency, and security threat detection. Serves 2M+ distinct locations worldwide. Used for geo-targeted marketing, fraud prevention, and compliance.' },
+  { name: 'Marketstack', slug: 'marketstack', category: 'Finance', url: 'https://marketstack.com', tagline: 'Real-time, intraday & historical stock market data', desc: 'Stock market data API covering 30,000+ tickers across 500,000+ stocks on global exchanges. 15+ years of historical data, 750+ market indices, SEC filings. Free tier: 100 requests/month.' },
+  { name: 'Aviationstack', slug: 'aviationstack', category: 'Travel', url: 'https://aviationstack.com', tagline: 'Real-time flight status & global aviation data', desc: 'Track flights, airlines, airports, routes, schedules, and aviation activity worldwide. Built for travel platforms, flight tracking apps, and logistics operations.' },
+  { name: 'Serpstack', slug: 'serpstack', category: 'SEO', url: 'https://serpstack.com', tagline: 'Real-time Google search results via API', desc: 'Scrape SERP data at scale. Get real-time Google search results including organic results, ads, knowledge graph, featured snippets, and more via a simple REST API.' },
+  { name: 'Mediastack', slug: 'mediastack', category: 'News', url: 'https://mediastack.com', tagline: 'Live news & blog articles REST API', desc: 'Free REST API for live news and blog articles from 7,500+ sources worldwide. Filter by keyword, category, language, country, and date.' },
+  { name: 'Positionstack', slug: 'positionstack', category: 'Geolocation', url: 'https://positionstack.com', tagline: 'Forward & reverse batch geocoding API', desc: 'Accurate forward and reverse geocoding. Convert addresses to coordinates and coordinates to addresses. Batch processing support for high-volume lookups.' },
+  { name: 'Scrapestack', slug: 'scrapestack', category: 'Scraping', url: 'https://scrapestack.com', tagline: 'Real-time proxy & web scraping API', desc: 'Scalable proxy and web scraping REST API. Handles proxies, browsers, and CAPTCHAs automatically. Just send a URL, get back the HTML.' },
+  { name: 'Weatherstack', slug: 'weatherstack', category: 'Weather', url: 'https://weatherstack.com', tagline: 'Real-time & historical world weather data API', desc: 'Real-time, historical, and forecast weather data for any location. Covers temperature, wind, humidity, pressure, UV index, and more.' },
+  { name: 'Coinlayer', slug: 'coinlayer', category: 'Finance', url: 'https://coinlayer.com', tagline: 'Real-time cryptocurrency exchange rates', desc: 'Real-time and historical crypto exchange rates for 385+ coins. Bitcoin, Ethereum, and altcoin data with minute-level granularity.' },
+  { name: 'Numverify', slug: 'numverify', category: 'Marketing', url: 'https://numverify.com', tagline: 'Global phone number validation & lookup', desc: 'Validate phone numbers in real-time for 232 countries. Returns carrier info, line type (mobile/landline), and location data.' },
+  { name: 'Screenshotlayer', slug: 'screenshotlayer', category: 'DevTools', url: 'https://screenshotlayer.com', tagline: 'Capture website screenshots via API', desc: 'Automated website screenshot capture API. Render any URL as PNG or JPEG. Supports custom viewports, full-page capture, and thumbnail generation.' },
+  { name: 'PDFlayer', slug: 'pdflayer', category: 'DevTools', url: 'https://pdflayer.com', tagline: 'HTML to PDF conversion API', desc: 'Convert any HTML or URL to a high-quality PDF document. Supports custom headers, footers, page sizes, watermarks, and encryption.' },
+  { name: 'Userstack', slug: 'userstack', category: 'Marketing', url: 'https://userstack.com', tagline: 'User-Agent string lookup API', desc: 'Detect and parse user agents in real-time. Returns browser, OS, device type, and bot detection data for any User-Agent string.' },
+];
 
 const POSTS_PER_RUN = 2;
 const DELAY_BETWEEN_POSTS = 310000; // 5+ min to respect rate limit
@@ -237,6 +256,163 @@ ${actor.description || 'A powerful automation tool on the Apify platform.'}
   }
 };
 
+// ─── APILayer article templates ──────────────────────────────────────────────
+
+const APILAYER_ARTICLE_TYPES = {
+  spotlight: {
+    generate: (product) => {
+      const url = `${product.url}?fpr=${APILAYER_AFFILIATE_ID}`;
+      const body = `
+Looking for a reliable ${product.category.toLowerCase()} API? ${product.name} might be exactly what you need.
+
+## What is ${product.name}?
+
+${product.desc}
+
+## Quick Facts
+
+| Detail | Info |
+|---|---|
+| **Category** | ${product.category} |
+| **Type** | REST API |
+| **Format** | JSON |
+| **Auth** | API Key |
+| **Free Tier** | Yes |
+
+## Why ${product.name}?
+
+- **Production-ready** — used by 2.2M+ developers on APILayer
+- **One API key** — works across all 40+ APILayer APIs
+- **Free to start** — no credit card required
+- **Great docs** — clear documentation with code examples
+- **Scalable** — from hobby projects to enterprise
+
+## Get Started
+
+[Try ${product.name} free](${url}) — sign up takes 30 seconds, no credit card needed.
+
+---
+
+*${product.name} is part of [APILayer](${APILAYER_SIGNUP}), a platform with 40+ production-ready APIs under one account and one API key.*
+`.trim();
+
+      return {
+        title: `${product.name} — ${product.tagline}`,
+        body,
+        tags: ['webdev', 'api', 'tools', 'programming'],
+      };
+    }
+  },
+
+  roundup: {
+    generate: (products, category) => {
+      const filtered = products.filter(p => p.category === category);
+      if (filtered.length < 2) return null;
+
+      let body = `Need ${category.toLowerCase()} data for your app? Here are the best APIs available on APILayer for ${category.toLowerCase()}.\n\n`;
+
+      filtered.forEach((p, i) => {
+        const url = `${p.url}?fpr=${APILAYER_AFFILIATE_ID}`;
+        body += `## ${i + 1}. ${p.name}\n\n`;
+        body += `**${p.tagline}**\n\n`;
+        body += `${p.desc}\n\n`;
+        body += `[Try ${p.name} free](${url})\n\n---\n\n`;
+      });
+
+      body += `## Why APILayer?\n\n`;
+      body += `All these APIs work under **one account and one API key**. Sign up once, get access to 40+ APIs. No credit card required.\n\n`;
+      body += `[Start building for free](${APILAYER_SIGNUP})\n`;
+
+      const tagMap = {
+        Finance: ['api', 'fintech', 'webdev', 'tools'],
+        Geolocation: ['api', 'webdev', 'tools', 'programming'],
+        SEO: ['seo', 'api', 'webdev', 'tools'],
+        News: ['api', 'webdev', 'tools', 'programming'],
+        Marketing: ['marketing', 'api', 'webdev', 'tools'],
+        DevTools: ['api', 'webdev', 'tools', 'programming'],
+        Weather: ['api', 'webdev', 'tools', 'programming'],
+        Travel: ['api', 'webdev', 'tools', 'travel'],
+        Scraping: ['api', 'webdev', 'tools', 'webscraping'],
+      };
+
+      return {
+        title: `Best ${category} APIs for Developers in 2026`,
+        body,
+        tags: tagMap[category] || ['api', 'webdev', 'tools', 'programming'],
+      };
+    }
+  },
+
+  guide: {
+    generate: (products, topic) => {
+      const guideMap = {
+        'ip geolocation': {
+          title: 'How to Add IP Geolocation to Your App in 5 Minutes',
+          intro: 'Know where your users are — without asking them.',
+          products: ['IPStack', 'Positionstack'],
+          tags: ['webdev', 'api', 'tools', 'tutorial'],
+        },
+        'stock market data': {
+          title: 'How to Get Real-Time Stock Market Data via API',
+          intro: 'Building a finance app or trading bot? You need reliable market data.',
+          products: ['Marketstack', 'Coinlayer'],
+          tags: ['api', 'fintech', 'webdev', 'tools'],
+        },
+        'flight tracking': {
+          title: 'How to Build a Flight Tracker with Aviationstack API',
+          intro: 'Track any flight in real-time with a single API call.',
+          products: ['Aviationstack'],
+          tags: ['api', 'webdev', 'tools', 'tutorial'],
+        },
+        'serp scraping': {
+          title: 'How to Scrape Google Search Results Without Getting Blocked',
+          intro: 'Need SERP data at scale? Forget proxies and headless browsers.',
+          products: ['Serpstack', 'Scrapestack'],
+          tags: ['seo', 'api', 'webdev', 'tools'],
+        },
+        'phone validation': {
+          title: 'How to Validate Phone Numbers via API — Global Coverage',
+          intro: 'Bad phone data kills conversion rates. Fix it at the source.',
+          products: ['Numverify'],
+          tags: ['api', 'webdev', 'tools', 'marketing'],
+        },
+      };
+
+      const config = guideMap[topic];
+      if (!config) return null;
+
+      const relevant = products.filter(p => config.products.includes(p.name));
+
+      let body = `${config.intro}\n\n`;
+      body += `## The Problem\n\n`;
+      body += `Most developers either build custom solutions (slow, fragile) or pay for expensive enterprise APIs (overkill for most projects). There's a middle ground.\n\n`;
+      body += `## The Solution\n\n`;
+
+      relevant.forEach((p, i) => {
+        const url = `${p.url}?fpr=${APILAYER_AFFILIATE_ID}`;
+        body += `### ${p.name}\n\n`;
+        body += `${p.desc}\n\n`;
+        body += `[Try ${p.name} free](${url})\n\n`;
+      });
+
+      body += `## Getting Started\n\n`;
+      body += `1. [Sign up for APILayer](${APILAYER_SIGNUP}) — free, no credit card\n`;
+      body += `2. Get your API key from the dashboard\n`;
+      body += `3. Make your first API call in seconds\n\n`;
+      body += `One account gives you access to 40+ APIs. Start free and scale as you grow.\n`;
+
+      return {
+        title: config.title,
+        body,
+        tags: config.tags,
+      };
+    }
+  }
+};
+
+const APILAYER_CATEGORIES = ['Finance', 'Geolocation', 'SEO', 'News', 'Marketing', 'DevTools', 'Weather', 'Travel', 'Scraping'];
+const APILAYER_GUIDE_TOPICS = ['ip geolocation', 'stock market data', 'flight tracking', 'serp scraping', 'phone validation'];
+
 const COMPARISON_KEYWORDS = [
   'instagram', 'tiktok', 'linkedin', 'youtube', 'twitter', 'facebook',
   'google maps', 'amazon', 'indeed', 'reddit'
@@ -369,6 +545,11 @@ function loadState() {
       typeQueue: [],
       postCount: 0,
       lastRun: null,
+      // APILayer state
+      alPostedProducts: [],
+      alPostedCategories: [],
+      alPostedGuides: [],
+      alTypeQueue: [],
     };
   }
 }
@@ -385,51 +566,106 @@ function pickPostType(state) {
   return state.typeQueue.shift();
 }
 
-async function generateArticle(state) {
+function pickALPostType(state) {
+  const types = ['spotlight', 'roundup', 'guide'];
+  if (!state.alTypeQueue || state.alTypeQueue.length === 0) {
+    state.alTypeQueue = types.slice().sort(() => Math.random() - 0.5);
+  }
+  return state.alTypeQueue.shift();
+}
+
+async function generateApifyArticle(state) {
   const type = pickPostType(state);
-  console.log(`Generating ${type} article...`);
+  console.log(`Generating Apify ${type} article...`);
 
   if (type === 'spotlight') {
     const allActors = await fetchAllTopActors(200);
     const unposted = allActors.filter(a => !state.postedActors.includes(`${a.username}/${a.name}`));
-    if (unposted.length === 0) { state.postedActors = []; return generateArticle(state); }
+    if (unposted.length === 0) { state.postedActors = []; return generateApifyArticle(state); }
     const actor = unposted[Math.floor(Math.random() * Math.min(30, unposted.length))];
     const article = ARTICLE_TYPES.spotlight.generate(actor);
     state.postedActors.push(`${actor.username}/${actor.name}`);
-    return { ...article, type: 'spotlight', series: 'Apify Tool Spotlight' };
+    return { ...article, type: 'spotlight', series: 'Apify Tool Spotlight', platform: 'apify' };
   }
 
   if (type === 'topList') {
     const unpostedCats = CATEGORIES_FOR_LISTS.filter(c => !state.postedCategories.includes(c));
-    if (unpostedCats.length === 0) { state.postedCategories = []; return generateArticle(state); }
+    if (unpostedCats.length === 0) { state.postedCategories = []; return generateApifyArticle(state); }
     const cat = unpostedCats[Math.floor(Math.random() * unpostedCats.length)];
     const actors = await fetchTopActors(cat, 20);
     const article = ARTICLE_TYPES.topList.generate(actors, cat);
     state.postedCategories.push(cat);
-    return { ...article, type: 'topList', series: 'Best APIs & Scrapers' };
+    return { ...article, type: 'topList', series: 'Best APIs & Scrapers', platform: 'apify' };
   }
 
   if (type === 'comparison') {
     const unpostedKw = COMPARISON_KEYWORDS.filter(k => !state.postedKeywords.includes(k));
-    if (unpostedKw.length === 0) { state.postedKeywords = []; return generateArticle(state); }
+    if (unpostedKw.length === 0) { state.postedKeywords = []; return generateApifyArticle(state); }
     const kw = unpostedKw[Math.floor(Math.random() * unpostedKw.length)];
     const allActors = await fetchAllTopActors(200);
     const article = ARTICLE_TYPES.comparison.generate(allActors, kw);
-    if (!article) { state.postedKeywords.push(kw); return generateArticle(state); }
+    if (!article) { state.postedKeywords.push(kw); return generateApifyArticle(state); }
     state.postedKeywords.push(kw);
-    return { ...article, type: 'comparison', series: 'Tool Comparisons' };
+    return { ...article, type: 'comparison', series: 'Tool Comparisons', platform: 'apify' };
   }
 
   if (type === 'guide') {
     const unpostedGuides = GUIDE_TOPICS.filter(t => !state.postedGuides.includes(t));
-    if (unpostedGuides.length === 0) { state.postedGuides = []; return generateArticle(state); }
+    if (unpostedGuides.length === 0) { state.postedGuides = []; return generateApifyArticle(state); }
     const topic = unpostedGuides[Math.floor(Math.random() * unpostedGuides.length)];
     const allActors = await fetchAllTopActors(50);
     const article = ARTICLE_TYPES.guide.generate(allActors, topic);
-    if (!article) { state.postedGuides.push(topic); return generateArticle(state); }
+    if (!article) { state.postedGuides.push(topic); return generateApifyArticle(state); }
     state.postedGuides.push(topic);
-    return { ...article, type: 'guide', series: 'Automation Guides' };
+    return { ...article, type: 'guide', series: 'Automation Guides', platform: 'apify' };
   }
+}
+
+function generateAPILayerArticle(state) {
+  const type = pickALPostType(state);
+  console.log(`Generating APILayer ${type} article...`);
+
+  if (type === 'spotlight') {
+    if (!state.alPostedProducts) state.alPostedProducts = [];
+    const unposted = APILAYER_PRODUCTS.filter(p => !state.alPostedProducts.includes(p.slug));
+    if (unposted.length === 0) { state.alPostedProducts = []; return generateAPILayerArticle(state); }
+    const product = unposted[Math.floor(Math.random() * unposted.length)];
+    const article = APILAYER_ARTICLE_TYPES.spotlight.generate(product);
+    state.alPostedProducts.push(product.slug);
+    return { ...article, type: 'spotlight', series: 'API Spotlight', platform: 'apilayer' };
+  }
+
+  if (type === 'roundup') {
+    if (!state.alPostedCategories) state.alPostedCategories = [];
+    const unpostedCats = APILAYER_CATEGORIES.filter(c => !state.alPostedCategories.includes(c));
+    if (unpostedCats.length === 0) { state.alPostedCategories = []; return generateAPILayerArticle(state); }
+    const cat = unpostedCats[Math.floor(Math.random() * unpostedCats.length)];
+    const article = APILAYER_ARTICLE_TYPES.roundup.generate(APILAYER_PRODUCTS, cat);
+    if (!article) { state.alPostedCategories.push(cat); return generateAPILayerArticle(state); }
+    state.alPostedCategories.push(cat);
+    return { ...article, type: 'roundup', series: 'Best APIs for Developers', platform: 'apilayer' };
+  }
+
+  if (type === 'guide') {
+    if (!state.alPostedGuides) state.alPostedGuides = [];
+    const unposted = APILAYER_GUIDE_TOPICS.filter(t => !state.alPostedGuides.includes(t));
+    if (unposted.length === 0) { state.alPostedGuides = []; return generateAPILayerArticle(state); }
+    const topic = unposted[Math.floor(Math.random() * unposted.length)];
+    const article = APILAYER_ARTICLE_TYPES.guide.generate(APILAYER_PRODUCTS, topic);
+    if (!article) { state.alPostedGuides.push(topic); return generateAPILayerArticle(state); }
+    state.alPostedGuides.push(topic);
+    return { ...article, type: 'guide', series: 'API Guides', platform: 'apilayer' };
+  }
+}
+
+async function generateArticle(state, index) {
+  const totalIndex = (state.postCount || 0) + (index || 0);
+  const platform = (totalIndex % 2 === 0) ? 'apify' : 'apilayer';
+  console.log(`Platform: ${platform}`);
+  if (platform === 'apilayer') {
+    return generateAPILayerArticle(state);
+  }
+  return generateApifyArticle(state);
 }
 
 // ─── Jekyll post ─────────────────────────────────────────────────────────────
@@ -480,7 +716,7 @@ async function main() {
   for (let i = 0; i < count; i++) {
     console.log(`\n--- Article ${i + 1}/${count} ---`);
 
-    const article = await generateArticle(state);
+    const article = await generateArticle(state, i);
     console.log(`Type: ${article.type}`);
     console.log(`Title: ${article.title}`);
     console.log(`Tags: ${article.tags.join(', ')}`);
