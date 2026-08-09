@@ -208,9 +208,7 @@ const AL_POST_TYPES = {
         body += `| ${i + 1} | **${p.name}** | ${p.category} | ${p.tagline} |\n`;
       });
 
-      body += `\nAll available on APILayer — one account, one API key, 40+ APIs. Free to start, no credit card needed.\n\n`;
-      body += `---\n\n`;
-      body += `*Check out [APILayer](https://apilayer.com) for the full list.*`;
+      body += `\n**[Sign up for APILayer free](${APILAYER_SIGNUP})** — one account, one API key, 40+ APIs. No credit card needed.`;
 
       return {
         title: `${products.length} Free APIs Every Developer Should Know About`,
@@ -243,7 +241,8 @@ const AL_POST_TYPES = {
       cases.forEach(c => { body += `- ${c}\n`; });
       body += `\nFree tier available — no credit card required to start.\n\n`;
       body += `---\n\n`;
-      body += `*${product.name} is part of [APILayer](https://apilayer.com) — 40+ APIs, one account, one key.*`;
+      body += `**[Try ${product.name} free](${product.url}?fpr=${APILAYER_AFFILIATE_ID})**\n\n`;
+      body += `*${product.name} is part of [APILayer](${APILAYER_SIGNUP}) — 40+ APIs, one account, one key.*`;
 
       return {
         title: `What You Can Build with ${product.name} API — ${product.category} Data Made Easy`,
