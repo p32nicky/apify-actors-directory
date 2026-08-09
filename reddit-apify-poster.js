@@ -205,7 +205,7 @@ const AL_POST_TYPES = {
       body += `| # | API | Category | What It Does |\n|---|-----|----------|-------------|\n`;
 
       products.forEach((p, i) => {
-        body += `| ${i + 1} | **${p.name}** | ${p.category} | ${p.tagline} |\n`;
+        body += `| ${i + 1} | [**${p.name}**](${p.url}?fpr=${APILAYER_AFFILIATE_ID}) | ${p.category} | ${p.tagline} |\n`;
       });
 
       body += `\n**[Sign up for APILayer free](${APILAYER_SIGNUP})** — one account, one API key, 40+ APIs. No credit card needed.`;
