@@ -9,6 +9,31 @@ const APILAYER_AFFILIATE_ID = process.env.APILAYER_AFFILIATE_ID || 'nick77';
 const GITHUB_REPO = 'https://github.com/p32nicky/apify-actors-directory';
 const APIFY_SIGNUP = `https://www.apify.com/?fpr=${AFFILIATE_ID}`;
 const APILAYER_SIGNUP = `https://apilayer.com?fpr=${APILAYER_AFFILIATE_ID}`;
+const BASE44_LINK = 'https://base44.pxf.io/c/2252709/2049275/25619?trafcat=base';
+const HOSTINGER_LINK = 'https://tinyurl.com/25vpu3xd';
+
+const PLATFORM_ROTATION = ['apilayer', 'base44', 'apilayer', 'hostinger', 'base44', 'apilayer', 'base44', 'apilayer', 'apify', 'hostinger'];
+
+const HOSTINGER_PLANS = [
+  { name: 'Premium', price: '$2.99/mo', sites: '3 websites', storage: '20 GB SSD', backups: 'Weekly', extras: 'Free domain, 2 mailboxes, CDN, free SSL' },
+  { name: 'Unlimited', price: '$3.79/mo', sites: 'Unlimited websites', storage: '50 GB NVMe', backups: 'Daily', extras: 'Free domain, unlimited mailboxes, CDN, AI email marketing' },
+  { name: 'Cloud Startup', price: '$7.99/mo', sites: 'Unlimited websites', storage: '100 GB NVMe', backups: 'Daily + on-demand', extras: 'Dedicated IP, 4 CPU cores, 4 GB RAM' },
+];
+
+const HOSTINGER_USE_CASES = ['portfolio site', 'small business website', 'WordPress blog', 'ecommerce store', 'SaaS landing page', 'freelancer website'];
+
+const BASE44_FEATURES = [
+  { name: 'AI App Generation', desc: 'Describe your app in plain English and Base44 builds it — frontend, backend, database, and deployment.' },
+  { name: 'Built-in Database', desc: 'Every app gets a database automatically. No setup, no schemas to write — just describe your data.' },
+  { name: 'Authentication', desc: 'User login and signup built in from the start. Google, email/password, and magic links out of the box.' },
+  { name: 'One-Click Deploy', desc: 'Your app goes live instantly. No servers to configure, no CI/CD pipelines to set up.' },
+  { name: 'AI Agents', desc: 'Build AI-powered agents that can automate workflows, answer questions, and interact with your app data.' },
+  { name: 'Custom Domains', desc: 'Connect your own domain to any Base44 app. SSL certificates handled automatically.' },
+  { name: 'API Integration', desc: 'Connect to external APIs and services. Base44 handles the plumbing so you can focus on logic.' },
+  { name: 'Real-time Collaboration', desc: 'Multiple team members can work on the same app simultaneously with live updates.' },
+];
+
+const BASE44_USE_CASES = ['internal tools', 'landing pages', 'ai agents', 'client portals', 'ecommerce'];
 
 // ─── APILayer product catalog ────────────────────────────────────────────────
 const APILAYER_PRODUCTS = [
@@ -550,6 +575,11 @@ function loadState() {
       alPostedCategories: [],
       alPostedGuides: [],
       alTypeQueue: [],
+      // Base44 state
+      b44TypeQueue: [],
+      b44PostedUseCases: [],
+      hostTypeQueue: [],
+      hostPostedUseCases: [],
     };
   }
 }
@@ -658,13 +688,120 @@ function generateAPILayerArticle(state) {
   }
 }
 
+function pickB44ArticleType(state) {
+  const types = ['spotlight', 'useCase', 'comparison'];
+  if (!state.b44TypeQueue || state.b44TypeQueue.length === 0) {
+    state.b44TypeQueue = types.slice().sort(() => Math.random() - 0.5);
+  }
+  return state.b44TypeQueue.shift();
+}
+
+function generateBase44Article(state) {
+  const type = pickB44ArticleType(state);
+  console.log(`Generating Base44 ${type} article...`);
+
+  if (type === 'spotlight') {
+    const feature = BASE44_FEATURES[Math.floor(Math.random() * BASE44_FEATURES.length)];
+    return {
+      title: `Build Apps Without Code: ${feature.name} with Base44`,
+      body: `Building software used to require months of development time. Base44 changes that completely.\n\n## What is Base44?\n\nBase44 is a no-code/vibe-coding platform that lets you build full applications by describing what you want in plain English. The AI generates your app — frontend, backend, database, and deployment — in minutes.\n\n## Feature Spotlight: ${feature.name}\n\n${feature.desc}\n\n## Why Developers and Non-Developers Love It\n\n- **AI-powered generation** — describe your app, get a working prototype\n- **Built-in database** — no schema design or migration headaches\n- **Authentication included** — user login works out of the box\n- **One-click deploy** — go live instantly, no DevOps needed\n- **AI agents** — build intelligent automations natively\n\n## Get Started\n\nBase44 is free to start. No credit card required.\n\n**[Try Base44 free →](${BASE44_LINK})**`,
+      tags: ['nocode', 'webdev', 'programming', 'ai'],
+      series: 'No-Code Development',
+      platform: 'base44',
+      type: 'spotlight'
+    };
+  }
+
+  if (type === 'useCase') {
+    if (!state.b44PostedUseCases) state.b44PostedUseCases = [];
+    const unposted = BASE44_USE_CASES.filter(u => !state.b44PostedUseCases.includes(u));
+    const useCases = unposted.length > 0 ? unposted : BASE44_USE_CASES;
+    if (unposted.length === 0) state.b44PostedUseCases = [];
+    const uc = useCases[Math.floor(Math.random() * useCases.length)];
+    state.b44PostedUseCases.push(uc);
+    const ucTitle = uc.charAt(0).toUpperCase() + uc.slice(1);
+    return {
+      title: `How to Build ${ucTitle} Without Writing a Single Line of Code`,
+      body: `Need ${uc} but don't have the budget for a dev team? Here's how to build it yourself in minutes.\n\n## The Problem\n\nTraditionally, building ${uc} requires:\n- A frontend developer\n- A backend developer\n- Database design\n- DevOps for deployment\n- Weeks or months of development time\n\n## The Solution: Base44\n\nBase44 lets you skip all of that. Just describe your ${uc} app in plain English, and the AI builds everything:\n\n1. **Describe** — Tell Base44 what your ${uc} app should do\n2. **Customize** — Tweak the generated UI and logic\n3. **Deploy** — Go live with one click\n\n## What You Get\n\n- Full working application with database\n- User authentication built in\n- Mobile-responsive design\n- Custom domain support\n- No monthly developer costs\n\n## Perfect For\n\n- Non-technical founders building ${uc}\n- Freelancers delivering ${uc} to clients fast\n- Teams prototyping before committing to custom development\n\n**[Build your ${uc} app free →](${BASE44_LINK})**`,
+      tags: ['nocode', 'startup', 'webdev', 'productivity'],
+      series: 'No-Code Development',
+      platform: 'base44',
+      type: 'useCase'
+    };
+  }
+
+  if (type === 'comparison') {
+    return {
+      title: 'No-Code in 2024: Why AI-Powered App Builders Are Replacing Drag-and-Drop',
+      body: `The no-code space has evolved. Drag-and-drop builders were the first wave. AI-powered builders like Base44 are the next.\n\n## Traditional No-Code vs AI-Powered No-Code\n\n| Feature | Drag & Drop Tools | Base44 (AI-Powered) |\n|---------|-------------------|--------------------|\n| App creation | Manual component placement | Describe in English |\n| Database | Manual schema design | Auto-generated |\n| Authentication | Plugin or add-on | Built-in |\n| AI agents | Not available | Native support |\n| Learning curve | Hours to days | Minutes |\n| Deployment | Separate configuration | One click |\n\n## What Makes Base44 Different\n\n**You describe, AI builds.** Instead of dragging components around a canvas, you tell Base44 what your app should do in plain English. The AI generates the full stack — frontend, backend, database, auth, and hosting.\n\n**Full-stack output.** Most no-code tools give you a frontend. Base44 gives you a complete application with a real database, API endpoints, and user management.\n\n**AI agents built in.** Build intelligent automations that can process data, answer questions, and trigger actions — no third-party integrations needed.\n\n## Who It's For\n\n- Founders who want to validate ideas fast\n- Agencies building client apps without dev overhead\n- Teams that need internal tools yesterday\n\n**[Try Base44 free →](${BASE44_LINK})**`,
+      tags: ['nocode', 'ai', 'webdev', 'startup'],
+      series: 'No-Code Development',
+      platform: 'base44',
+      type: 'comparison'
+    };
+  }
+}
+
+function pickHostArticleType(state) {
+  const types = ['planGuide', 'useCase', 'whySwitch'];
+  if (!state.hostTypeQueue || state.hostTypeQueue.length === 0) {
+    state.hostTypeQueue = types.slice().sort(() => Math.random() - 0.5);
+  }
+  return state.hostTypeQueue.shift();
+}
+
+function generateHostingerArticle(state) {
+  const type = pickHostArticleType(state);
+  console.log(`Generating Hostinger ${type} article...`);
+
+  if (type === 'planGuide') {
+    return {
+      title: 'Hostinger Plans Compared: Which One Do You Actually Need in 2026?',
+      body: `Choosing a hosting plan shouldn't be complicated. Here's a breakdown of Hostinger's three main plans so you can pick the right one without overpaying.\n\n## Plan Comparison\n\n| Plan | Price | Websites | Storage | Backups | Best For |\n|------|-------|----------|---------|---------|----------|\n| Premium | $2.99/mo | 3 | 20 GB SSD | Weekly | Personal sites, blogs |\n| Unlimited | $3.79/mo | Unlimited | 50 GB NVMe | Daily | Freelancers, growing brands |\n| Cloud Startup | $7.99/mo | Unlimited | 100 GB NVMe | Daily + on-demand | Agencies, high-traffic sites |\n\n## What All Plans Include\n\n- Free domain for 1 year\n- Free SSL certificate\n- CDN for global speed\n- WordPress one-click install\n- Drag-and-drop website builder\n- Vibe coding — describe your site, AI builds it\n- 24/7 priority support\n- 99.9% uptime guarantee\n\n## My Recommendation\n\nThe **Unlimited plan at $3.79/mo** is the sweet spot. Unlimited websites, daily backups, unlimited mailboxes, and NVMe storage. If you're managing client sites or running multiple projects, it's hard to beat.\n\nFor high-traffic sites or agencies, **Cloud Startup** adds dedicated IP, 4 CPU cores, and 4 GB RAM.\n\nAll plans come with a 30-day money-back guarantee.\n\n**[Check Hostinger pricing →](${HOSTINGER_LINK})**`,
+      tags: ['webdev', 'hosting', 'beginners', 'wordpress'],
+      series: 'Web Hosting Guides',
+      platform: 'hostinger',
+      type: 'planGuide'
+    };
+  }
+
+  if (type === 'useCase') {
+    if (!state.hostPostedUseCases) state.hostPostedUseCases = [];
+    const unposted = HOSTINGER_USE_CASES.filter(u => !state.hostPostedUseCases.includes(u));
+    const useCases = unposted.length > 0 ? unposted : HOSTINGER_USE_CASES;
+    if (unposted.length === 0) state.hostPostedUseCases = [];
+    const uc = useCases[Math.floor(Math.random() * useCases.length)];
+    state.hostPostedUseCases.push(uc);
+    const ucTitle = uc.charAt(0).toUpperCase() + uc.slice(1);
+    return {
+      title: `How to Launch ${/^[aeiou]/i.test(ucTitle) ? 'an' : 'a'} ${ucTitle} for Under $3/Month`,
+      body: `You don't need expensive hosting to launch a ${uc}. Here's how to get one live in under an hour for $2.99/mo.\n\n## What You Need\n\n1. **A domain** — Hostinger includes one free for the first year\n2. **Hosting** — The Premium plan ($2.99/mo) is enough to start\n3. **A platform** — WordPress (one-click install) or Hostinger's drag-and-drop builder\n\n## Step-by-Step Setup\n\n### 1. Pick Your Plan\n\nFor a ${uc}, the **Premium plan** works great. You get 20 GB SSD storage, free SSL, CDN, and 24/7 support.\n\nIf you think you'll add more sites later, the **Unlimited plan** ($3.79/mo) gives you unlimited websites and daily backups.\n\n### 2. Register Your Domain\n\nPick a domain during checkout — it's free for the first year with WHOIS privacy included.\n\n### 3. Install WordPress or Use the Builder\n\nHostinger's control panel lets you install WordPress in one click. Or use their drag-and-drop builder if you want something simpler.\n\nThey also have **vibe coding** — describe your site in plain English and AI generates it.\n\n### 4. Set Up Email\n\nCreate a professional email address (hello@yourdomain.com) through Hostinger's built-in email tools.\n\n### 5. Go Live\n\nActivate SSL (free), enable CDN, and you're live. The whole process takes 30-60 minutes.\n\n## Why Hostinger?\n\n- NVMe storage on higher plans\n- 99.9% uptime guarantee\n- Built-in ecommerce support\n- Free automatic website migration\n- 30-day money-back guarantee\n\n**[Get started with Hostinger →](${HOSTINGER_LINK})**`,
+      tags: ['webdev', 'hosting', 'beginners', 'tutorial'],
+      series: 'Web Hosting Guides',
+      platform: 'hostinger',
+      type: 'useCase'
+    };
+  }
+
+  if (type === 'whySwitch') {
+    return {
+      title: 'Why I Switched to Hostinger — Honest Review After Using It for Months',
+      body: `I've tried multiple hosting providers over the years. Here's why Hostinger is my current recommendation, especially for developers and small businesses.\n\n## What I Like\n\n### Price-to-Value Ratio\n\nStarting at $2.99/mo for the Premium plan, you get more than most hosts charge $10+/mo for:\n- Free domain (1 year)\n- Free SSL\n- CDN included\n- WordPress one-click install\n- Drag-and-drop builder\n- Email accounts\n\n### NVMe Storage\n\nThe Unlimited ($3.79/mo) and Cloud Startup ($7.99/mo) plans use NVMe storage, which is noticeably faster than regular SSD hosting.\n\n### Vibe Coding\n\nThis is a newer feature — describe your website in plain English and AI builds it. Useful for quick prototypes and landing pages.\n\n### Developer-Friendly\n\n- Node.js support\n- SSH access\n- Git integration\n- Multiple PHP versions\n- WP-CLI support\n\n## Plan Breakdown\n\n| Plan | Price | Storage | Websites | Key Feature |\n|------|-------|---------|----------|-------------|\n| Premium | $2.99/mo | 20 GB SSD | 3 | Best starting point |\n| Unlimited | $3.79/mo | 50 GB NVMe | Unlimited | Best value |\n| Cloud Startup | $7.99/mo | 100 GB NVMe | Unlimited | Best performance |\n\n## Who Should Use Hostinger\n\n- **Beginners** launching their first site\n- **Freelancers** managing multiple client sites (Unlimited plan)\n- **Small businesses** that need reliable hosting without enterprise pricing\n- **Developers** who want Node.js + WordPress on the same host\n\n30-day money-back guarantee on all plans.\n\n**[Check Hostinger plans →](${HOSTINGER_LINK})**`,
+      tags: ['webdev', 'hosting', 'review', 'wordpress'],
+      series: 'Web Hosting Guides',
+      platform: 'hostinger',
+      type: 'whySwitch'
+    };
+  }
+}
+
 async function generateArticle(state, index) {
   const totalIndex = (state.postCount || 0) + (index || 0);
-  const platform = (totalIndex % 2 === 0) ? 'apify' : 'apilayer';
+  const platform = PLATFORM_ROTATION[totalIndex % PLATFORM_ROTATION.length];
   console.log(`Platform: ${platform}`);
-  if (platform === 'apilayer') {
-    return generateAPILayerArticle(state);
-  }
+  if (platform === 'hostinger') return generateHostingerArticle(state);
+  if (platform === 'base44') return generateBase44Article(state);
+  if (platform === 'apilayer') return generateAPILayerArticle(state);
   return generateApifyArticle(state);
 }
 

@@ -13,6 +13,29 @@ const AFFILIATE_ID = process.env.APIFY_AFFILIATE_ID || '97nrp4';
 const APILAYER_AFFILIATE_ID = process.env.APILAYER_AFFILIATE_ID || 'nick77';
 const GITHUB_REPO = 'https://github.com/p32nicky/apify-actors-directory';
 const APILAYER_SIGNUP = `https://apilayer.com?fpr=${APILAYER_AFFILIATE_ID}`;
+const BASE44_LINK = 'https://base44.pxf.io/c/2252709/2049275/25619?trafcat=base';
+const HOSTINGER_LINK = 'https://tinyurl.com/25vpu3xd';
+
+// ─── Hostinger product info (real data from hostinger.com/pricing) ───────────
+const HOSTINGER_PLANS = [
+  { name: 'Premium', price: '$2.99/mo', sites: '3 websites', storage: '20 GB SSD', backups: 'Weekly', extras: 'Free domain, 2 mailboxes, CDN, free SSL' },
+  { name: 'Unlimited', price: '$3.79/mo', sites: 'Unlimited websites', storage: '50 GB NVMe', backups: 'Daily', extras: 'Free domain, unlimited mailboxes, CDN, AI email marketing' },
+  { name: 'Cloud Startup', price: '$7.99/mo', sites: 'Unlimited websites', storage: '100 GB NVMe', backups: 'Daily + on-demand', extras: 'Dedicated IP, 4 CPU cores, 4 GB RAM' },
+];
+
+const HOSTINGER_USE_CASES = ['portfolio site', 'small business website', 'WordPress blog', 'ecommerce store', 'SaaS landing page', 'freelancer website'];
+
+// ─── Base44 product info (real data from base44.com) ─────────────────────────
+const BASE44_FEATURES = [
+  { name: 'App Builder', desc: 'Turn any idea into a fully functional app — with backend, auth, payments, and hosting built in. No code needed.' },
+  { name: 'Website Builder', desc: 'AI-generated design, custom domain, built-in SEO tools — ready to go live from day one.' },
+  { name: 'AI Agents (Superagents)', desc: 'Create a 24/7 agent that connects to your tools, takes real action, and works while you sleep.' },
+  { name: 'Built-in Integrations', desc: 'Connects to Google Calendar, Gmail, Slack, Notion, HubSpot, Salesforce and more. API access for anything else.' },
+  { name: 'SEO/GEO Dashboard', desc: 'Get found on Google, ChatGPT, Gemini. Run a scan, get a prioritized fix list, let AI apply the fixes.' },
+  { name: 'App Analytics', desc: 'Track traffic, sales, customize your dashboard, and measure the actions that matter most.' },
+  { name: 'Social Presence', desc: 'AI reads what you build, picks the right social platforms, and generates ready-to-post content in your voice.' },
+  { name: 'Video Generation', desc: 'Describe a video, get one. Add it to any page — hero sections, onboarding screens, product previews.' },
+];
 
 // ─── APILayer product catalog ────────────────────────────────────────────────
 const APILAYER_PRODUCTS = [
@@ -253,6 +276,108 @@ const AL_POST_TYPES = {
   }
 };
 
+// ─── Base44 Reddit post types ────────────────────────────────────────────────
+
+const B44_POST_TYPES = {
+  spotlight: {
+    generate: () => {
+      let body = `**Base44** is a vibe coding platform that lets you build apps, websites, and AI agents — just by describing what you want in plain language.\n\n`;
+      body += `## What You Get\n\n`;
+      body += `| Feature | Details |\n|---|---|\n`;
+      body += `| **App Builder** | Full-stack apps with backend, auth, payments, hosting |\n`;
+      body += `| **Website Builder** | AI-generated design, custom domain, SEO tools |\n`;
+      body += `| **AI Agents** | 24/7 agents that connect to your tools and take action |\n`;
+      body += `| **Integrations** | Slack, Gmail, Notion, HubSpot, Salesforce, API access |\n`;
+      body += `| **Analytics** | Traffic, sales, custom dashboards |\n`;
+      body += `| **Pricing** | Free to start, paid from $16/mo |\n\n`;
+      body += `No coding experience needed. Describe your idea, Base44 generates the code, design, and logic.\n\n`;
+      body += `**[Try Base44 free](${BASE44_LINK})**`;
+
+      return {
+        title: `Base44 — Build Apps, Websites & AI Agents with Vibe Coding (No Code Needed)`,
+        text: body,
+        commentLink: BASE44_LINK
+      };
+    }
+  },
+
+  useCase: {
+    generate: (useCase) => {
+      const useCases = {
+        'internal tools': {
+          title: 'Build Internal Tools in Minutes — No Developers Needed',
+          intro: 'Need a dashboard, CRM, or admin panel for your team? Stop waiting on engineering.',
+          details: 'Base44 lets you describe what you need in plain language and generates a working app — with database, auth, and hosting built in. Connect to Slack, Google Calendar, HubSpot, or any API.',
+        },
+        'landing pages': {
+          title: 'Build a Landing Page with AI in Under 5 Minutes',
+          intro: 'Need a landing page fast? Forget Figma, forget templates.',
+          details: 'Describe your product or service, and Base44 generates a complete landing page — design, copy, SEO, and custom domain. One click to publish.',
+        },
+        'ai agents': {
+          title: 'Create AI Agents That Actually Do Things — No Code Required',
+          intro: 'AI agents that connect to your real tools and take real action.',
+          details: 'Base44 Superagents connect to your inbox, calendar, CRM, and other tools. They automate workflows, manage data, and keep running 24/7 while you sleep.',
+        },
+        'client portals': {
+          title: 'Build a Client Portal Without Writing Code',
+          intro: 'Give your clients a dedicated space to track progress, access data, and communicate.',
+          details: 'Base44 handles the backend, authentication, and hosting. Just describe what your clients need to see and do — the AI builds it.',
+        },
+        'ecommerce': {
+          title: 'Launch an Online Store with AI — No Shopify Needed',
+          intro: 'Sell products or services with a fully functional storefront built by AI.',
+          details: 'Base44 generates product pages, checkout flow, and payment processing. Built-in analytics track sales and traffic. Custom domain included.',
+        },
+      };
+
+      const config = useCases[useCase];
+      if (!config) return null;
+
+      let body = `${config.intro}\n\n`;
+      body += `${config.details}\n\n`;
+      body += `## Why Base44?\n\n`;
+      body += `- **No code** — describe what you want in plain language\n`;
+      body += `- **Full stack** — backend, database, auth, hosting included\n`;
+      body += `- **Free to start** — no credit card needed\n`;
+      body += `- **Ship fast** — go from idea to live app in minutes\n\n`;
+      body += `**[Try Base44 free](${BASE44_LINK})**`;
+
+      return {
+        title: config.title,
+        text: body,
+        commentLink: BASE44_LINK
+      };
+    }
+  },
+
+  comparison: {
+    generate: () => {
+      let body = `How does Base44 compare to other no-code/AI app builders?\n\n`;
+      body += `| Feature | Base44 | Traditional No-Code | Custom Dev |\n`;
+      body += `|---------|--------|-------------------|------------|\n`;
+      body += `| Setup time | Minutes | Hours | Weeks |\n`;
+      body += `| Coding needed | No | Some | Yes |\n`;
+      body += `| Backend included | Yes | Sometimes | Build it |\n`;
+      body += `| Auth & payments | Built-in | Plugins | Build it |\n`;
+      body += `| AI generation | Yes | No | No |\n`;
+      body += `| Hosting | Built-in | Separate | Separate |\n`;
+      body += `| Free tier | Yes | Varies | No |\n`;
+      body += `| Starting price | $0 | $20-50/mo | $5K+ |\n\n`;
+      body += `Base44 uses vibe coding — describe what you want, AI builds it. Full-stack apps with backend, database, auth, and hosting. No setup.\n\n`;
+      body += `**[Try Base44 free](${BASE44_LINK})**`;
+
+      return {
+        title: `No-Code App Builders Compared — Where Does AI Vibe Coding Fit?`,
+        text: body,
+        commentLink: BASE44_LINK
+      };
+    }
+  }
+};
+
+const BASE44_USE_CASES = ['internal tools', 'landing pages', 'ai agents', 'client portals', 'ecommerce'];
+
 const COMPARISON_KEYWORDS = [
   'instagram', 'tiktok', 'linkedin', 'youtube', 'twitter', 'facebook',
   'google maps', 'amazon', 'indeed', 'reddit', 'zillow', 'booking',
@@ -426,6 +551,9 @@ async function fetchAllTopActors(limit = 200) {
 
 // ─── State management ─────────────────────────────────────────────────────────
 
+// Platform rotation: Apify, APILayer, Base44, APILayer, Base44 (1:2:2)
+const PLATFORM_ROTATION = ['apilayer', 'base44', 'apilayer', 'hostinger', 'base44', 'apilayer', 'base44', 'apilayer', 'apify', 'hostinger'];
+
 function loadState() {
   try {
     return JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
@@ -439,6 +567,10 @@ function loadState() {
       lastRun: null,
       alPostedProducts: [],
       alTypeQueue: [],
+      b44TypeQueue: [],
+      b44PostedUseCases: [],
+      hostTypeQueue: [],
+      hostPostedUseCases: [],
     };
   }
 }
@@ -546,13 +678,119 @@ function generateAPILayerPost(state) {
   }
 }
 
+function pickB44PostType(state) {
+  const types = ['spotlight', 'useCase', 'comparison'];
+  if (!state.b44TypeQueue || state.b44TypeQueue.length === 0) {
+    state.b44TypeQueue = types.slice().sort(() => Math.random() - 0.5);
+  }
+  return state.b44TypeQueue.shift();
+}
+
+function generateBase44Post(state) {
+  const type = pickB44PostType(state);
+  console.log(`Generating Base44 ${type} post...`);
+
+  if (type === 'spotlight') {
+    const feature = BASE44_FEATURES[Math.floor(Math.random() * BASE44_FEATURES.length)];
+    return {
+      title: `Build ${feature.name} Without Code — Base44 Makes It Ridiculously Easy`,
+      text: `If you've ever wanted to build apps but don't want to deal with coding, Base44 is worth checking out.\n\n**${feature.name}**: ${feature.desc}\n\nIt's a no-code/vibe-coding platform that lets you build full apps, websites, and even AI agents just by describing what you want.\n\n**Key highlights:**\n- AI-powered app generation from natural language\n- Built-in database, auth, and hosting\n- Deploy instantly with one click\n- No technical skills required\n\n[Try Base44 free](${BASE44_LINK})`,
+      commentLink: BASE44_LINK,
+      flair: 'Tool',
+      type: 'spotlight',
+      platform: 'base44'
+    };
+  }
+
+  if (type === 'useCase') {
+    if (!state.b44PostedUseCases) state.b44PostedUseCases = [];
+    const unposted = BASE44_USE_CASES.filter(u => !state.b44PostedUseCases.includes(u));
+    const useCases = unposted.length > 0 ? unposted : BASE44_USE_CASES;
+    if (unposted.length === 0) state.b44PostedUseCases = [];
+    const uc = useCases[Math.floor(Math.random() * useCases.length)];
+    state.b44PostedUseCases.push(uc);
+    return {
+      title: `How to Build ${uc.charAt(0).toUpperCase() + uc.slice(1)} Without Writing Code`,
+      text: `Building ${uc} used to require a dev team or expensive contractors. Not anymore.\n\n**Base44** lets you describe what you want in plain English and generates a full working app — database, UI, auth, and deployment included.\n\nPerfect for:\n- Non-technical founders who need ${uc}\n- Freelancers building ${uc} for clients\n- Teams prototyping ${uc} fast\n\nNo coding experience needed. Describe your app, customize it, and deploy — all in minutes.\n\n[Build your ${uc} app free](${BASE44_LINK})`,
+      commentLink: BASE44_LINK,
+      flair: 'Resource',
+      type: 'useCase',
+      platform: 'base44'
+    };
+  }
+
+  if (type === 'comparison') {
+    return {
+      title: 'No-Code App Builders in 2024: Why Base44 Stands Out for AI-Powered Development',
+      text: `Most no-code tools still make you drag-and-drop components manually. Base44 takes a different approach — you describe your app in plain English and AI builds it for you.\n\n**What makes Base44 different:**\n\n| Feature | Traditional No-Code | Base44 |\n|---------|-------------------|--------|\n| App creation | Drag & drop | Describe in English |\n| Database | Manual setup | Auto-generated |\n| Auth | Plugin required | Built-in |\n| AI agents | Not available | Native support |\n| Deployment | Separate step | One-click |\n\nIt handles the full stack — frontend, backend, database, auth, and hosting — from a single text description.\n\n[Try Base44 free](${BASE44_LINK})`,
+      commentLink: BASE44_LINK,
+      flair: 'Resource',
+      type: 'comparison',
+      platform: 'base44'
+    };
+  }
+}
+
+function pickHostPostType(state) {
+  const types = ['planCompare', 'useCase', 'whySwitch'];
+  if (!state.hostTypeQueue || state.hostTypeQueue.length === 0) {
+    state.hostTypeQueue = types.slice().sort(() => Math.random() - 0.5);
+  }
+  return state.hostTypeQueue.shift();
+}
+
+function generateHostingerPost(state) {
+  const type = pickHostPostType(state);
+  console.log(`Generating Hostinger ${type} post...`);
+
+  if (type === 'planCompare') {
+    return {
+      title: 'Hostinger Plans Compared — Which One Do You Actually Need?',
+      text: `Hostinger has 3 main plans and they're all cheap, but here's which one actually makes sense for different use cases.\n\n| Plan | Price | Websites | Storage | Best For |\n|------|-------|----------|---------|----------|\n| Premium | $2.99/mo | 3 | 20 GB SSD | Personal sites, blogs |\n| Unlimited | $3.79/mo | Unlimited | 50 GB NVMe | Freelancers, growing brands |\n| Cloud Startup | $7.99/mo | Unlimited | 100 GB NVMe | Agencies, high-traffic sites |\n\nAll plans include free domain (1 year), free SSL, CDN, WordPress one-click install, and 24/7 support.\n\nThe **Unlimited** plan at $3.79/mo is the sweet spot for most people — unlimited sites, daily backups, and unlimited mailboxes.\n\n[Check Hostinger pricing](${HOSTINGER_LINK})`,
+      commentLink: HOSTINGER_LINK,
+      flair: 'Resource',
+      type: 'planCompare',
+      platform: 'hostinger'
+    };
+  }
+
+  if (type === 'useCase') {
+    if (!state.hostPostedUseCases) state.hostPostedUseCases = [];
+    const unposted = HOSTINGER_USE_CASES.filter(u => !state.hostPostedUseCases.includes(u));
+    const useCases = unposted.length > 0 ? unposted : HOSTINGER_USE_CASES;
+    if (unposted.length === 0) state.hostPostedUseCases = [];
+    const uc = useCases[Math.floor(Math.random() * useCases.length)];
+    state.hostPostedUseCases.push(uc);
+    const ucTitle = uc.charAt(0).toUpperCase() + uc.slice(1);
+    return {
+      title: `How to Launch ${/^[aeiou]/i.test(ucTitle) ? 'an' : 'a'} ${ucTitle} for Under $3/Month with Hostinger`,
+      text: `If you need a ${uc}, you don't need to spend $20+/month on hosting. Hostinger's Premium plan starts at $2.99/mo and includes everything you need.\n\n**What you get:**\n- Free domain for 1 year\n- Free SSL certificate\n- WordPress one-click install\n- Built-in CDN for speed\n- Drag-and-drop website builder\n- Vibe coding — describe what you want, AI builds it\n- 24/7 priority support\n\n**Why it works for a ${uc}:**\n- NVMe storage keeps your site fast\n- 99.9% uptime guarantee\n- Free email (hello@yourdomain.com)\n- Built-in ecommerce if you need it\n\n30-day money-back guarantee, so no risk to try it.\n\n[Get started with Hostinger](${HOSTINGER_LINK})`,
+      commentLink: HOSTINGER_LINK,
+      flair: 'Resource',
+      type: 'useCase',
+      platform: 'hostinger'
+    };
+  }
+
+  if (type === 'whySwitch') {
+    return {
+      title: 'Why I Switched to Hostinger — Honest Take After Using It for Months',
+      text: `I've used a few hosting providers and Hostinger has the best value for the price. Here's what stood out:\n\n**Pros:**\n- $2.99/mo for the Premium plan (3 sites, 20 GB, free domain)\n- NVMe storage on higher plans — noticeably faster than regular SSD\n- Free SSL on all plans, no extra config\n- WordPress install takes 60 seconds\n- Vibe coding feature — describe your site in plain English and AI builds it\n- 24/7 support actually responds fast\n\n**What's included free:**\n- Domain (1 year)\n- SSL certificate\n- CDN\n- Website builder\n- Email accounts\n- Weekly/daily backups depending on plan\n\n**Who it's best for:**\n- Beginners launching their first site\n- Freelancers managing multiple client sites\n- Small businesses that don't want to overpay\n\n30-day money-back guarantee on all plans.\n\n[Check Hostinger plans](${HOSTINGER_LINK})`,
+      commentLink: HOSTINGER_LINK,
+      flair: 'Resource',
+      type: 'whySwitch',
+      platform: 'hostinger'
+    };
+  }
+}
+
 async function generatePost(state, index) {
   const totalIndex = (state.postCount || 0) + (index || 0);
-  const platform = (totalIndex % 2 === 0) ? 'apify' : 'apilayer';
+  const platform = PLATFORM_ROTATION[totalIndex % PLATFORM_ROTATION.length];
   console.log(`Platform: ${platform}`);
-  if (platform === 'apilayer') {
-    return generateAPILayerPost(state);
-  }
+  if (platform === 'hostinger') return generateHostingerPost(state);
+  if (platform === 'base44') return generateBase44Post(state);
+  if (platform === 'apilayer') return generateAPILayerPost(state);
   return generateApifyPost(state);
 }
 
@@ -596,6 +834,12 @@ async function main() {
         if (post.platform === 'apilayer') {
           commentText = `**Direct link:** ${post.commentLink}\n\n` +
             `*[APILayer](${APILAYER_SIGNUP}) — 40+ production-ready APIs, one account, one key. Free to start.*`;
+        } else if (post.platform === 'hostinger') {
+          commentText = `**Get started:** ${HOSTINGER_LINK}\n\n` +
+            `*Hostinger — Fast hosting from $2.99/mo. Free domain, SSL, and 24/7 support.*`;
+        } else if (post.platform === 'base44') {
+          commentText = `**Try it free:** ${BASE44_LINK}\n\n` +
+            `*Base44 — Build full apps by describing what you want. No coding needed.*`;
         } else {
           commentText = `**Direct link:** ${post.commentLink}\n\n` +
             `*New to Apify? Every account gets $5/month in free credits. ` +
