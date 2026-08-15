@@ -14,7 +14,7 @@ const APILAYER_AFFILIATE_ID = process.env.APILAYER_AFFILIATE_ID || 'nick77';
 const GITHUB_REPO = 'https://github.com/p32nicky/apify-actors-directory';
 const APILAYER_SIGNUP = `https://apilayer.com?fpr=${APILAYER_AFFILIATE_ID}`;
 const BASE44_LINK = 'https://base44.pxf.io/c/2252709/2049275/25619?trafcat=base';
-const HOSTINGER_LINK = 'https://tinyurl.com/25vpu3xd';
+const HOSTINGER_LINK = 'https://www.hostinger.com/pricing?REFERRALCODE=3SXNICKDA0EC';
 
 // ─── Hostinger product info (real data from hostinger.com/pricing) ───────────
 const HOSTINGER_PLANS = [

@@ -10,7 +10,7 @@ const GITHUB_REPO = 'https://github.com/p32nicky/apify-actors-directory';
 const APIFY_SIGNUP = `https://www.apify.com/?fpr=${AFFILIATE_ID}`;
 const APILAYER_SIGNUP = `https://apilayer.com?fpr=${APILAYER_AFFILIATE_ID}`;
 const BASE44_LINK = 'https://base44.pxf.io/c/2252709/2049275/25619?trafcat=base';
-const HOSTINGER_LINK = 'https://tinyurl.com/25vpu3xd';
+const HOSTINGER_LINK = 'https://www.hostinger.com/pricing?REFERRALCODE=3SXNICKDA0EC';
 
 const PLATFORM_ROTATION = ['base44', 'hostinger', 'base44', 'hostinger', 'apify', 'base44', 'hostinger', 'base44', 'hostinger', 'base44'];
 
