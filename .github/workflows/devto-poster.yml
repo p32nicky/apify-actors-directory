@@ -30,20 +30,23 @@ jobs:
           restore-keys: |
             devto-poster-state-
 
+      - name: Sync Hostinger coupons
+        run: node sync-coupons.js
+
       - name: Publish articles
         env:
           DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
           APIFY_AFFILIATE_ID: '97nrp4'
         run: node devto-poster.js --count=2
 
-      - name: Commit and push new blog posts
+      - name: Commit and push new blog posts and coupon data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add _posts/
+          git add _posts/ hostinger-coupons.json
           if git diff --staged --quiet; then
-            echo "No new blog posts to commit"
+            echo "No new posts or coupon updates to commit"
           else
-            git commit -m "Add blog posts from Dev.to poster run"
+            git commit -m "Add blog posts and sync coupon data"
             git push
           fi

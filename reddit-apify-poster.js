@@ -24,6 +24,39 @@ const HOSTINGER_PLANS = [
 ];
 
 const HOSTINGER_USE_CASES = ['portfolio site', 'small business website', 'WordPress blog', 'ecommerce store', 'SaaS landing page', 'freelancer website'];
+const HOSTINGER_COUPONS_PATHS = [
+  path.join(__dirname, '..', 'hostingerbot', 'data', 'seen_codes.json'),
+  path.join(__dirname, 'hostinger-coupons.json'),
+];
+
+function loadHostingerCoupons() {
+  for (const fp of HOSTINGER_COUPONS_PATHS) {
+    try {
+      const data = JSON.parse(fs.readFileSync(fp, 'utf-8'));
+      const coupons = Object.entries(data)
+        .map(([code, info]) => ({ code, ...info }))
+        .sort((a, b) => new Date(b.last_seen) - new Date(a.last_seen));
+      const recent = coupons.filter(c => {
+        const age = Date.now() - new Date(c.last_seen).getTime();
+        return age < 7 * 24 * 60 * 60 * 1000;
+      });
+      return recent.length > 0 ? recent : coupons.slice(0, 5);
+    } catch { continue; }
+  }
+  return [];
+}
+
+function formatCouponSection(coupons, limit = 3) {
+  if (coupons.length === 0) return '';
+  const top = coupons.slice(0, limit);
+  let section = '\n\n**Latest Hostinger coupon codes:**\n\n';
+  section += '| Code | Deal |\n|------|------|\n';
+  for (const c of top) {
+    section += `| **${c.code}** | ${c.title} |\n`;
+  }
+  section += `\nApply at checkout: [Hostinger pricing](${HOSTINGER_LINK})`;
+  return section;
+}
 
 // ─── Base44 product info (real data from base44.com) ─────────────────────────
 const BASE44_FEATURES = [
@@ -742,11 +775,14 @@ function pickHostPostType(state) {
 function generateHostingerPost(state) {
   const type = pickHostPostType(state);
   console.log(`Generating Hostinger ${type} post...`);
+  const coupons = loadHostingerCoupons();
+  const couponSection = formatCouponSection(coupons);
+  console.log(`Loaded ${coupons.length} coupons`);
 
   if (type === 'planCompare') {
     return {
       title: 'Hostinger Plans Compared — Which One Do You Actually Need?',
-      text: `Hostinger has 3 main plans and they're all cheap, but here's which one actually makes sense for different use cases.\n\n| Plan | Price | Websites | Storage | Best For |\n|------|-------|----------|---------|----------|\n| Premium | $2.99/mo | 3 | 20 GB SSD | Personal sites, blogs |\n| Unlimited | $3.79/mo | Unlimited | 50 GB NVMe | Freelancers, growing brands |\n| Cloud Startup | $7.99/mo | Unlimited | 100 GB NVMe | Agencies, high-traffic sites |\n\nAll plans include free domain (1 year), free SSL, CDN, WordPress one-click install, and 24/7 support.\n\nThe **Unlimited** plan at $3.79/mo is the sweet spot for most people — unlimited sites, daily backups, and unlimited mailboxes.\n\n[Check Hostinger pricing](${HOSTINGER_LINK})`,
+      text: `Hostinger has 3 main plans and they're all cheap, but here's which one actually makes sense for different use cases.\n\n| Plan | Price | Websites | Storage | Best For |\n|------|-------|----------|---------|----------|\n| Premium | $2.99/mo | 3 | 20 GB SSD | Personal sites, blogs |\n| Unlimited | $3.79/mo | Unlimited | 50 GB NVMe | Freelancers, growing brands |\n| Cloud Startup | $7.99/mo | Unlimited | 100 GB NVMe | Agencies, high-traffic sites |\n\nAll plans include free domain (1 year), free SSL, CDN, WordPress one-click install, and 24/7 support.\n\nThe **Unlimited** plan at $3.79/mo is the sweet spot for most people — unlimited sites, daily backups, and unlimited mailboxes.${couponSection}\n\n[Check Hostinger pricing](${HOSTINGER_LINK})`,
       commentLink: HOSTINGER_LINK,
       flair: 'Resource',
       type: 'planCompare',
@@ -764,7 +800,7 @@ function generateHostingerPost(state) {
     const ucTitle = uc.charAt(0).toUpperCase() + uc.slice(1);
     return {
       title: `How to Launch ${/^[aeiou]/i.test(ucTitle) ? 'an' : 'a'} ${ucTitle} for Under $3/Month with Hostinger`,
-      text: `If you need a ${uc}, you don't need to spend $20+/month on hosting. Hostinger's Premium plan starts at $2.99/mo and includes everything you need.\n\n**What you get:**\n- Free domain for 1 year\n- Free SSL certificate\n- WordPress one-click install\n- Built-in CDN for speed\n- Drag-and-drop website builder\n- Vibe coding — describe what you want, AI builds it\n- 24/7 priority support\n\n**Why it works for a ${uc}:**\n- NVMe storage keeps your site fast\n- 99.9% uptime guarantee\n- Free email (hello@yourdomain.com)\n- Built-in ecommerce if you need it\n\n30-day money-back guarantee, so no risk to try it.\n\n[Get started with Hostinger](${HOSTINGER_LINK})`,
+      text: `If you need a ${uc}, you don't need to spend $20+/month on hosting. Hostinger's Premium plan starts at $2.99/mo and includes everything you need.\n\n**What you get:**\n- Free domain for 1 year\n- Free SSL certificate\n- WordPress one-click install\n- Built-in CDN for speed\n- Drag-and-drop website builder\n- Vibe coding — describe what you want, AI builds it\n- 24/7 priority support\n\n**Why it works for a ${uc}:**\n- NVMe storage keeps your site fast\n- 99.9% uptime guarantee\n- Free email (hello@yourdomain.com)\n- Built-in ecommerce if you need it${couponSection}\n\n30-day money-back guarantee, so no risk to try it.\n\n[Get started with Hostinger](${HOSTINGER_LINK})`,
       commentLink: HOSTINGER_LINK,
       flair: 'Resource',
       type: 'useCase',
@@ -775,7 +811,7 @@ function generateHostingerPost(state) {
   if (type === 'whySwitch') {
     return {
       title: 'Why I Switched to Hostinger — Honest Take After Using It for Months',
-      text: `I've used a few hosting providers and Hostinger has the best value for the price. Here's what stood out:\n\n**Pros:**\n- $2.99/mo for the Premium plan (3 sites, 20 GB, free domain)\n- NVMe storage on higher plans — noticeably faster than regular SSD\n- Free SSL on all plans, no extra config\n- WordPress install takes 60 seconds\n- Vibe coding feature — describe your site in plain English and AI builds it\n- 24/7 support actually responds fast\n\n**What's included free:**\n- Domain (1 year)\n- SSL certificate\n- CDN\n- Website builder\n- Email accounts\n- Weekly/daily backups depending on plan\n\n**Who it's best for:**\n- Beginners launching their first site\n- Freelancers managing multiple client sites\n- Small businesses that don't want to overpay\n\n30-day money-back guarantee on all plans.\n\n[Check Hostinger plans](${HOSTINGER_LINK})`,
+      text: `I've used a few hosting providers and Hostinger has the best value for the price. Here's what stood out:\n\n**Pros:**\n- $2.99/mo for the Premium plan (3 sites, 20 GB, free domain)\n- NVMe storage on higher plans — noticeably faster than regular SSD\n- Free SSL on all plans, no extra config\n- WordPress install takes 60 seconds\n- Vibe coding feature — describe your site in plain English and AI builds it\n- 24/7 support actually responds fast\n\n**What's included free:**\n- Domain (1 year)\n- SSL certificate\n- CDN\n- Website builder\n- Email accounts\n- Weekly/daily backups depending on plan\n\n**Who it's best for:**\n- Beginners launching their first site\n- Freelancers managing multiple client sites\n- Small businesses that don't want to overpay${couponSection}\n\n30-day money-back guarantee on all plans.\n\n[Check Hostinger plans](${HOSTINGER_LINK})`,
       commentLink: HOSTINGER_LINK,
       flair: 'Resource',
       type: 'whySwitch',
