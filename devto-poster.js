@@ -12,7 +12,7 @@ const APILAYER_SIGNUP = `https://apilayer.com?fpr=${APILAYER_AFFILIATE_ID}`;
 const BASE44_LINK = 'https://base44.pxf.io/c/2252709/2049275/25619?trafcat=base';
 const HOSTINGER_LINK = 'https://tinyurl.com/25vpu3xd';
 
-const PLATFORM_ROTATION = ['apilayer', 'base44', 'apilayer', 'hostinger', 'base44', 'apilayer', 'base44', 'apilayer', 'apify', 'hostinger'];
+const PLATFORM_ROTATION = ['base44', 'hostinger', 'base44', 'hostinger', 'apify', 'base44', 'hostinger', 'base44', 'hostinger', 'base44'];
 
 const HOSTINGER_PLANS = [
   { name: 'Premium', price: '$2.99/mo', sites: '3 websites', storage: '20 GB SSD', backups: 'Weekly', extras: 'Free domain, 2 mailboxes, CDN, free SSL' },

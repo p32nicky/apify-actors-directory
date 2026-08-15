@@ -585,7 +585,7 @@ async function fetchAllTopActors(limit = 200) {
 // ─── State management ─────────────────────────────────────────────────────────
 
 // Platform rotation: Apify, APILayer, Base44, APILayer, Base44 (1:2:2)
-const PLATFORM_ROTATION = ['apilayer', 'base44', 'apilayer', 'hostinger', 'base44', 'apilayer', 'base44', 'apilayer', 'apify', 'hostinger'];
+const PLATFORM_ROTATION = ['base44', 'hostinger', 'base44', 'hostinger', 'apify', 'base44', 'hostinger', 'base44', 'hostinger', 'base44'];
 
 function loadState() {
   try {
