@@ -12,7 +12,7 @@ const APILAYER_SIGNUP = `https://apilayer.com?fpr=${APILAYER_AFFILIATE_ID}`;
 const BASE44_LINK = 'https://base44.pxf.io/c/2252709/2049275/25619?trafcat=base';
 const HOSTINGER_LINK = 'https://www.hostinger.com/pricing?REFERRALCODE=3SXNICKDA0EC';
 
-const PLATFORM_ROTATION = ['base44', 'hostinger', 'base44', 'hostinger', 'apify', 'base44', 'hostinger', 'base44', 'hostinger', 'base44'];
+const PLATFORM_ROTATION = ['apilayer', 'apify', 'apilayer', 'apify', 'apilayer'];
 
 const HOSTINGER_PLANS = [
   { name: 'Premium', price: '$2.99/mo', sites: '3 websites', storage: '20 GB SSD', backups: 'Weekly', extras: 'Free domain, 2 mailboxes, CDN, free SSL' },
@@ -21,6 +21,15 @@ const HOSTINGER_PLANS = [
 ];
 
 const HOSTINGER_USE_CASES = ['portfolio site', 'small business website', 'WordPress blog', 'ecommerce store', 'SaaS landing page', 'freelancer website'];
+const SITE_URL = 'https://hostingreviews.online';
+const USE_CASE_PAGES = {
+  'portfolio site': '/services/portfolio-website/',
+  'small business website': '/services/small-business-website/',
+  'WordPress blog': '/services/wordpress-hosting/',
+  'ecommerce store': '/services/online-store/',
+  'SaaS landing page': '/services/startup-website/',
+  'freelancer website': '/services/personal-website/',
+};
 const HOSTINGER_COUPONS_PATHS = [
   path.join(__dirname, '..', 'hostingerbot', 'data', 'seen_codes.json'),
   path.join(__dirname, 'hostinger-coupons.json'),
@@ -51,7 +60,7 @@ function formatCouponSection(coupons, limit = 3) {
   for (const c of top) {
     section += `| **${c.code}** | ${c.title} |\n`;
   }
-  section += `\nApply at checkout: **[Hostinger pricing](${HOSTINGER_LINK})**`;
+  section += `\nApply at checkout: **[Hostinger pricing](${HOSTINGER_LINK})** | **[Full hosting guides](${SITE_URL})**`;
   return section;
 }
 
@@ -85,7 +94,7 @@ const APILAYER_PRODUCTS = [
   { name: 'Userstack', slug: 'userstack', category: 'Marketing', url: 'https://userstack.com', tagline: 'User-Agent string lookup API', desc: 'Detect and parse user agents in real-time. Returns browser, OS, device type, and bot detection data for any User-Agent string.' },
 ];
 
-const POSTS_PER_RUN = 2;
+const POSTS_PER_RUN = 4;
 const DELAY_BETWEEN_POSTS = 310000; // 5+ min to respect rate limit
 const STATE_FILE = path.join(__dirname, '.devto-poster-state.json');
 const POSTS_DIR = path.join(__dirname, '_posts');
@@ -793,7 +802,7 @@ function generateHostingerArticle(state) {
   if (type === 'planGuide') {
     return {
       title: 'Hostinger Plans Compared: Which One Do You Actually Need in 2026?',
-      body: `Choosing a hosting plan shouldn't be complicated. Here's a breakdown of Hostinger's three main plans so you can pick the right one without overpaying.\n\n## Plan Comparison\n\n| Plan | Price | Websites | Storage | Backups | Best For |\n|------|-------|----------|---------|---------|----------|\n| Premium | $2.99/mo | 3 | 20 GB SSD | Weekly | Personal sites, blogs |\n| Unlimited | $3.79/mo | Unlimited | 50 GB NVMe | Daily | Freelancers, growing brands |\n| Cloud Startup | $7.99/mo | Unlimited | 100 GB NVMe | Daily + on-demand | Agencies, high-traffic sites |\n\n## What All Plans Include\n\n- Free domain for 1 year\n- Free SSL certificate\n- CDN for global speed\n- WordPress one-click install\n- Drag-and-drop website builder\n- Vibe coding — describe your site, AI builds it\n- 24/7 priority support\n- 99.9% uptime guarantee\n\n## My Recommendation\n\nThe **Unlimited plan at $3.79/mo** is the sweet spot. Unlimited websites, daily backups, unlimited mailboxes, and NVMe storage. If you're managing client sites or running multiple projects, it's hard to beat.\n\nFor high-traffic sites or agencies, **Cloud Startup** adds dedicated IP, 4 CPU cores, and 4 GB RAM.${couponSection}\n\nAll plans come with a 30-day money-back guarantee.\n\n**[Check Hostinger pricing →](${HOSTINGER_LINK})**`,
+      body: `Choosing a hosting plan shouldn't be complicated. Here's a breakdown of Hostinger's three main plans so you can pick the right one without overpaying.\n\n## Plan Comparison\n\n| Plan | Price | Websites | Storage | Backups | Best For |\n|------|-------|----------|---------|---------|----------|\n| Premium | $2.99/mo | 3 | 20 GB SSD | Weekly | Personal sites, blogs |\n| Unlimited | $3.79/mo | Unlimited | 50 GB NVMe | Daily | Freelancers, growing brands |\n| Cloud Startup | $7.99/mo | Unlimited | 100 GB NVMe | Daily + on-demand | Agencies, high-traffic sites |\n\n## What All Plans Include\n\n- Free domain for 1 year\n- Free SSL certificate\n- CDN for global speed\n- WordPress one-click install\n- Drag-and-drop website builder\n- Vibe coding — describe your site, AI builds it\n- 24/7 priority support\n- 99.9% uptime guarantee\n\n## My Recommendation\n\nThe **Unlimited plan at $3.79/mo** is the sweet spot. Unlimited websites, daily backups, unlimited mailboxes, and NVMe storage. If you're managing client sites or running multiple projects, it's hard to beat.\n\nFor high-traffic sites or agencies, **Cloud Startup** adds dedicated IP, 4 CPU cores, and 4 GB RAM.${couponSection}\n\nAll plans come with a 30-day money-back guarantee.\n\n**[Read our full Hostinger hosting guide →](${SITE_URL}/services/start-a-blog/)**`,
       tags: ['webdev', 'hosting', 'beginners', 'wordpress'],
       series: 'Web Hosting Guides',
       platform: 'hostinger',
@@ -811,7 +820,7 @@ function generateHostingerArticle(state) {
     const ucTitle = uc.charAt(0).toUpperCase() + uc.slice(1);
     return {
       title: `How to Launch ${/^[aeiou]/i.test(ucTitle) ? 'an' : 'a'} ${ucTitle} for Under $3/Month`,
-      body: `You don't need expensive hosting to launch a ${uc}. Here's how to get one live in under an hour for $2.99/mo.\n\n## What You Need\n\n1. **A domain** — Hostinger includes one free for the first year\n2. **Hosting** — The Premium plan ($2.99/mo) is enough to start\n3. **A platform** — WordPress (one-click install) or Hostinger's drag-and-drop builder\n\n## Step-by-Step Setup\n\n### 1. Pick Your Plan\n\nFor a ${uc}, the **Premium plan** works great. You get 20 GB SSD storage, free SSL, CDN, and 24/7 support.\n\nIf you think you'll add more sites later, the **Unlimited plan** ($3.79/mo) gives you unlimited websites and daily backups.\n\n### 2. Register Your Domain\n\nPick a domain during checkout — it's free for the first year with WHOIS privacy included.\n\n### 3. Install WordPress or Use the Builder\n\nHostinger's control panel lets you install WordPress in one click. Or use their drag-and-drop builder if you want something simpler.\n\nThey also have **vibe coding** — describe your site in plain English and AI generates it.\n\n### 4. Set Up Email\n\nCreate a professional email address (hello@yourdomain.com) through Hostinger's built-in email tools.\n\n### 5. Go Live\n\nActivate SSL (free), enable CDN, and you're live. The whole process takes 30-60 minutes.\n\n## Why Hostinger?\n\n- NVMe storage on higher plans\n- 99.9% uptime guarantee\n- Built-in ecommerce support\n- Free automatic website migration\n- 30-day money-back guarantee${couponSection}\n\n**[Get started with Hostinger →](${HOSTINGER_LINK})**`,
+      body: `You don't need expensive hosting to launch a ${uc}. Here's how to get one live in under an hour for $2.99/mo.\n\n## What You Need\n\n1. **A domain** — Hostinger includes one free for the first year\n2. **Hosting** — The Premium plan ($2.99/mo) is enough to start\n3. **A platform** — WordPress (one-click install) or Hostinger's drag-and-drop builder\n\n## Step-by-Step Setup\n\n### 1. Pick Your Plan\n\nFor a ${uc}, the **Premium plan** works great. You get 20 GB SSD storage, free SSL, CDN, and 24/7 support.\n\nIf you think you'll add more sites later, the **Unlimited plan** ($3.79/mo) gives you unlimited websites and daily backups.\n\n### 2. Register Your Domain\n\nPick a domain during checkout — it's free for the first year with WHOIS privacy included.\n\n### 3. Install WordPress or Use the Builder\n\nHostinger's control panel lets you install WordPress in one click. Or use their drag-and-drop builder if you want something simpler.\n\nThey also have **vibe coding** — describe your site in plain English and AI generates it.\n\n### 4. Set Up Email\n\nCreate a professional email address (hello@yourdomain.com) through Hostinger's built-in email tools.\n\n### 5. Go Live\n\nActivate SSL (free), enable CDN, and you're live. The whole process takes 30-60 minutes.\n\n## Why Hostinger?\n\n- NVMe storage on higher plans\n- 99.9% uptime guarantee\n- Built-in ecommerce support\n- Free automatic website migration\n- 30-day money-back guarantee${couponSection}\n\n**[Read our full ${uc} hosting guide →](${SITE_URL}${USE_CASE_PAGES[uc] || '/'})**`,
       tags: ['webdev', 'hosting', 'beginners', 'tutorial'],
       series: 'Web Hosting Guides',
       platform: 'hostinger',
@@ -822,7 +831,7 @@ function generateHostingerArticle(state) {
   if (type === 'whySwitch') {
     return {
       title: 'Why I Switched to Hostinger — Honest Review After Using It for Months',
-      body: `I've tried multiple hosting providers over the years. Here's why Hostinger is my current recommendation, especially for developers and small businesses.\n\n## What I Like\n\n### Price-to-Value Ratio\n\nStarting at $2.99/mo for the Premium plan, you get more than most hosts charge $10+/mo for:\n- Free domain (1 year)\n- Free SSL\n- CDN included\n- WordPress one-click install\n- Drag-and-drop builder\n- Email accounts\n\n### NVMe Storage\n\nThe Unlimited ($3.79/mo) and Cloud Startup ($7.99/mo) plans use NVMe storage, which is noticeably faster than regular SSD hosting.\n\n### Vibe Coding\n\nThis is a newer feature — describe your website in plain English and AI builds it. Useful for quick prototypes and landing pages.\n\n### Developer-Friendly\n\n- Node.js support\n- SSH access\n- Git integration\n- Multiple PHP versions\n- WP-CLI support\n\n## Plan Breakdown\n\n| Plan | Price | Storage | Websites | Key Feature |\n|------|-------|---------|----------|-------------|\n| Premium | $2.99/mo | 20 GB SSD | 3 | Best starting point |\n| Unlimited | $3.79/mo | 50 GB NVMe | Unlimited | Best value |\n| Cloud Startup | $7.99/mo | 100 GB NVMe | Unlimited | Best performance |\n\n## Who Should Use Hostinger\n\n- **Beginners** launching their first site\n- **Freelancers** managing multiple client sites (Unlimited plan)\n- **Small businesses** that need reliable hosting without enterprise pricing\n- **Developers** who want Node.js + WordPress on the same host\n\n30-day money-back guarantee on all plans.${couponSection}\n\n**[Check Hostinger plans →](${HOSTINGER_LINK})**`,
+      body: `I've tried multiple hosting providers over the years. Here's why Hostinger is my current recommendation, especially for developers and small businesses.\n\n## What I Like\n\n### Price-to-Value Ratio\n\nStarting at $2.99/mo for the Premium plan, you get more than most hosts charge $10+/mo for:\n- Free domain (1 year)\n- Free SSL\n- CDN included\n- WordPress one-click install\n- Drag-and-drop builder\n- Email accounts\n\n### NVMe Storage\n\nThe Unlimited ($3.79/mo) and Cloud Startup ($7.99/mo) plans use NVMe storage, which is noticeably faster than regular SSD hosting.\n\n### Vibe Coding\n\nThis is a newer feature — describe your website in plain English and AI builds it. Useful for quick prototypes and landing pages.\n\n### Developer-Friendly\n\n- Node.js support\n- SSH access\n- Git integration\n- Multiple PHP versions\n- WP-CLI support\n\n## Plan Breakdown\n\n| Plan | Price | Storage | Websites | Key Feature |\n|------|-------|---------|----------|-------------|\n| Premium | $2.99/mo | 20 GB SSD | 3 | Best starting point |\n| Unlimited | $3.79/mo | 50 GB NVMe | Unlimited | Best value |\n| Cloud Startup | $7.99/mo | 100 GB NVMe | Unlimited | Best performance |\n\n## Who Should Use Hostinger\n\n- **Beginners** launching their first site\n- **Freelancers** managing multiple client sites (Unlimited plan)\n- **Small businesses** that need reliable hosting without enterprise pricing\n- **Developers** who want Node.js + WordPress on the same host\n\n30-day money-back guarantee on all plans.${couponSection}\n\n**[Read our detailed hosting guides →](${SITE_URL})**`,
       tags: ['webdev', 'hosting', 'review', 'wordpress'],
       series: 'Web Hosting Guides',
       platform: 'hostinger',

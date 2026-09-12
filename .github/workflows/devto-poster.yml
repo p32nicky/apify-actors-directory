@@ -2,10 +2,14 @@ name: Dev.to Article Poster
 
 on:
   schedule:
-    - cron: '0 13 * * *'  # 9 AM ET
-    - cron: '0 17 * * *'  # 1 PM ET
-    - cron: '0 21 * * *'  # 5 PM ET
-    - cron: '0 1 * * *'   # 9 PM ET
+    - cron: '0 12 * * *'  # 8 AM ET
+    - cron: '0 14 * * *'  # 10 AM ET
+    - cron: '0 16 * * *'  # 12 PM ET
+    - cron: '0 18 * * *'  # 2 PM ET
+    - cron: '0 20 * * *'  # 4 PM ET
+    - cron: '0 22 * * *'  # 6 PM ET
+    - cron: '0 0 * * *'   # 8 PM ET
+    - cron: '0 2 * * *'   # 10 PM ET
   workflow_dispatch:
 
 permissions:
@@ -14,7 +18,7 @@ permissions:
 jobs:
   post:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
 
@@ -37,7 +41,7 @@ jobs:
         env:
           DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
           APIFY_AFFILIATE_ID: '97nrp4'
-        run: node devto-poster.js --count=2
+        run: node devto-poster.js --count=4
 
       - name: Commit and push new blog posts and coupon data
         run: |
