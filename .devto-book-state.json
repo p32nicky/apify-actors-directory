@@ -1,18 +1,17 @@
 {
-  "postCount": 1,
-  "lastRun": "2026-09-21T14:25:44.160Z",
+  "postCount": 3,
+  "lastRun": "2026-09-21T19:57:14.646Z",
   "reviewedBooks": [
-    "1492034029"
+    "1492034029",
+    "0071843655"
   ],
   "postedComparisons": [
-    "interview-prep"
+    "interview-prep",
+    "python-mastery"
   ],
   "postedTopN": [
     "senior-developer",
     "must-own"
   ],
-  "typeQueue": [
-    "comparison",
-    "review"
-  ]
+  "typeQueue": []
 }
