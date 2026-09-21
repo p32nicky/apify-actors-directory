@@ -1,0 +1,48 @@
+name: Dev.to Book Review Poster
+
+on:
+  schedule:
+    - cron: '0 13 * * *'  # 9 AM ET
+    - cron: '0 17 * * *'  # 1 PM ET
+    - cron: '0 21 * * *'  # 5 PM ET
+    - cron: '0 1 * * *'   # 9 PM ET
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Restore book poster state
+        uses: actions/cache@v4
+        with:
+          path: .devto-book-state.json
+          key: devto-book-state-${{ github.run_number }}
+          restore-keys: |
+            devto-book-state-
+
+      - name: Publish book reviews
+        env:
+          DEVTO_BOOK_API_KEY: ${{ secrets.DEVTO_BOOK_API_KEY }}
+        run: node devto-book-poster.js --count=2
+
+      - name: Commit state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .devto-book-state.json
+          if git diff --staged --quiet; then
+            echo "No state changes"
+          else
+            git commit -m "Update book poster state"
+            git push
+          fi
