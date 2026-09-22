@@ -1,10 +1,11 @@
 {
-  "postCount": 7,
-  "lastRun": "2026-09-21T23:54:33.291Z",
+  "postCount": 9,
+  "lastRun": "2026-09-22T05:57:11.440Z",
   "reviewedBooks": [
     "1492034029",
     "0071843655",
-    "1492056359"
+    "1492056359",
+    "1098139291"
   ],
   "postedComparisons": [
     "interview-prep",
@@ -12,8 +13,11 @@
     "clean-code",
     "system-design"
   ],
-  "postedTopN": [],
+  "postedTopN": [
+    "must-own"
+  ],
   "typeQueue": [
+    "comparison",
     "review"
   ]
 }
