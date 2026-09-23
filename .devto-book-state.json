@@ -1,40 +1,38 @@
 {
-  "postCount": 1,
-  "lastRun": "2026-09-21T14:25:44.160Z",
+  "postCount": 21,
+  "lastRun": "2026-09-23T17:50:46.829Z",
   "reviewedBooks": [
     "1492034029",
-    "0999081446",
-    "1492076333",
-    "1098125975",
-    "1942788290",
-    "1492041312"
+    "0071843655",
+    "1492056359",
+    "1098139291",
+    "173210221X",
+    "1449373321",
+    "149207800X",
+    "0984782850",
+    "1118026470"
   ],
   "postedComparisons": [
     "interview-prep",
-    "linux",
-    "python",
-    "system-design"
+    "python-mastery",
+    "clean-code",
+    "system-design",
+    "new-languages",
+    "backend-essentials",
+    "javascript-mastery",
+    "career-growth"
   ],
   "postedTopN": [
-    "senior-developer",
-    "must-own",
-    "quick-wins",
     "classics"
   ],
   "typeQueue": [
+    "llm",
+    "llm",
+    "review",
+    "llm",
+    "comparison",
+    "llm",
+    "llm",
     "llm"
-  ],
-  "usedLLMTopics": [
-    7,
-    300,
-    78,
-    282,
-    186,
-    274,
-    24,
-    1,
-    244,
-    131,
-    269
   ]
 }
