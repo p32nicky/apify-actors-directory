@@ -37,11 +37,17 @@ jobs:
       - name: Sync Hostinger coupons
         run: node sync-coupons.js
 
-      - name: Publish articles
+      - name: Publish APILayer articles
         env:
           DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
           APIFY_AFFILIATE_ID: '97nrp4'
-        run: node devto-poster.js --count=4
+        run: node devto-poster.js --count=2
+
+      - name: Publish book reviews
+        env:
+          DEVTO_BOOK_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: node devto-book-poster.js --count=2
 
       - name: Commit and push new blog posts and coupon data
         run: |
