@@ -34,6 +34,7 @@ jobs:
       - name: Publish book reviews
         env:
           DEVTO_BOOK_API_KEY: ${{ secrets.DEVTO_BOOK_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: node devto-book-poster.js --count=2
 
       - name: Commit state
