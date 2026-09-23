@@ -1,6 +1,6 @@
 {
-  "postCount": 23,
-  "lastRun": "2026-09-23T18:57:30.370Z",
+  "postCount": 25,
+  "lastRun": "2026-09-23T20:03:18.893Z",
   "reviewedBooks": [
     "1492034029",
     "0071843655",
@@ -10,7 +10,8 @@
     "1449373321",
     "149207800X",
     "0984782850",
-    "1118026470"
+    "1118026470",
+    "1492076333"
   ],
   "postedComparisons": [
     "interview-prep",
@@ -26,8 +27,6 @@
     "classics"
   ],
   "typeQueue": [
-    "review",
-    "llm",
     "comparison",
     "llm",
     "llm",
@@ -35,6 +34,7 @@
   ],
   "usedLLMTopics": [
     172,
-    164
+    164,
+    0
   ]
 }
