@@ -1,6 +1,6 @@
 {
-  "postCount": 17,
-  "lastRun": "2026-09-22T23:34:40.095Z",
+  "postCount": 19,
+  "lastRun": "2026-09-23T05:35:46.199Z",
   "reviewedBooks": [
     "1492034029",
     "0071843655",
@@ -8,7 +8,8 @@
     "1098139291",
     "173210221X",
     "1449373321",
-    "149207800X"
+    "149207800X",
+    "0984782850"
   ],
   "postedComparisons": [
     "interview-prep",
@@ -17,12 +18,9 @@
     "system-design",
     "new-languages",
     "backend-essentials",
-    "javascript-mastery"
+    "javascript-mastery",
+    "career-growth"
   ],
-  "postedTopN": [
-    "must-own",
-    "senior-developer",
-    "beginner"
-  ],
+  "postedTopN": [],
   "typeQueue": []
 }
