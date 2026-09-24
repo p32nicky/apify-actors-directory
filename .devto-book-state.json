@@ -1,6 +1,6 @@
 {
-  "postCount": 27,
-  "lastRun": "2026-09-23T23:31:07.302Z",
+  "postCount": 29,
+  "lastRun": "2026-09-24T05:57:24.278Z",
   "reviewedBooks": [
     "1492034029",
     "0071843655",
@@ -27,14 +27,13 @@
   "postedTopN": [
     "classics"
   ],
-  "typeQueue": [
-    "llm",
-    "llm"
-  ],
+  "typeQueue": [],
   "usedLLMTopics": [
     172,
     164,
     0,
-    152
+    152,
+    24,
+    76
   ]
 }
