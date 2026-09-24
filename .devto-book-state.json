@@ -1,6 +1,6 @@
 {
-  "postCount": 29,
-  "lastRun": "2026-09-24T05:57:24.278Z",
+  "postCount": 31,
+  "lastRun": "2026-09-24T17:52:45.559Z",
   "reviewedBooks": [
     "1492034029",
     "0071843655",
@@ -22,18 +22,29 @@
     "backend-essentials",
     "javascript-mastery",
     "career-growth",
-    "javascript"
+    "javascript",
+    "security"
   ],
   "postedTopN": [
     "classics"
   ],
-  "typeQueue": [],
+  "typeQueue": [
+    "review",
+    "topN",
+    "llm",
+    "llm",
+    "review",
+    "llm",
+    "llm",
+    "llm"
+  ],
   "usedLLMTopics": [
     172,
     164,
     0,
     152,
     24,
-    76
+    76,
+    27
   ]
 }
