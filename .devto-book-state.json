@@ -1,6 +1,6 @@
 {
-  "postCount": 43,
-  "lastRun": "2026-09-25T19:13:22.144Z",
+  "postCount": 45,
+  "lastRun": "2026-09-25T20:21:58.950Z",
   "reviewedBooks": [
     "1492034029",
     "0071843655",
@@ -26,15 +26,14 @@
     "javascript-mastery",
     "career-growth",
     "javascript",
-    "security"
+    "security",
+    "go-vs-rust"
   ],
   "postedTopN": [
     "classics",
     "beginner"
   ],
   "typeQueue": [
-    "comparison",
-    "llm",
     "llm",
     "review",
     "llm",
@@ -55,7 +54,8 @@
     147,
     261,
     159,
-    49
+    49,
+    67
   ],
   "contentIndex": 2
 }
