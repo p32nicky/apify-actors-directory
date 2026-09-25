@@ -1,50 +1,50 @@
 {
-  "postCount": 37,
-  "lastRun": "2026-09-24T23:51:00.747Z",
+  "postCount": 7,
+  "lastRun": "2026-09-23T22:58:08.239Z",
   "reviewedBooks": [
     "1492034029",
-    "0071843655",
-    "1492056359",
-    "1098139291",
-    "173210221X",
-    "1449373321",
-    "149207800X",
-    "0984782850",
-    "1118026470",
+    "0999081446",
     "1492076333",
-    "1098139879",
-    "1098155068"
+    "1098125975",
+    "1942788290",
+    "1492041312",
+    "1449373321"
   ],
   "postedComparisons": [
     "interview-prep",
-    "python-mastery",
-    "clean-code",
-    "system-design",
-    "new-languages",
-    "backend-essentials",
-    "javascript-mastery",
-    "career-growth",
-    "javascript",
-    "security"
+    "linux",
+    "python",
+    "system-design"
   ],
   "postedTopN": [
-    "classics",
-    "beginner"
+    "senior-developer",
+    "must-own",
+    "quick-wins",
+    "classics"
   ],
   "typeQueue": [
     "llm",
-    "llm"
+    "comparison",
+    "review",
+    "topN"
   ],
   "usedLLMTopics": [
-    172,
-    164,
-    0,
-    152,
+    7,
+    300,
+    78,
+    282,
+    186,
+    274,
     24,
-    76,
-    27,
-    176,
-    235,
-    130
+    1,
+    244,
+    131,
+    269,
+    16,
+    151,
+    192,
+    30,
+    6,
+    219
   ]
 }

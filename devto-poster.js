@@ -14,7 +14,7 @@ const HOSTINGER_LINK = 'https://www.hostinger.com/pricing?REFERRALCODE=3SXNICKDA
 
 const BLUEHOST_LINK = 'https://bluehost.sjv.io/5k0d52';
 
-const PLATFORM_ROTATION = ['apilayer', 'bluehost', 'apilayer', 'bluehost', 'apilayer'];
+const PLATFORM_ROTATION = ['apilayer', 'bluehost', 'hostinger', 'apilayer', 'bluehost', 'hostinger'];
 
 const HOSTINGER_PLANS = [
   { name: 'Premium', price: '$2.99/mo', sites: '3 websites', storage: '20 GB SSD', backups: 'Weekly', extras: 'Free domain, 2 mailboxes, CDN, free SSL' },
