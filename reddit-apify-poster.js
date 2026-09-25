@@ -14,59 +14,7 @@ const APILAYER_AFFILIATE_ID = process.env.APILAYER_AFFILIATE_ID || 'nick77';
 const GITHUB_REPO = 'https://github.com/p32nicky/apify-actors-directory';
 const APILAYER_SIGNUP = `https://apilayer.com?fpr=${APILAYER_AFFILIATE_ID}`;
 const BASE44_LINK = 'https://base44.pxf.io/c/2252709/2049275/25619?trafcat=base';
-const HOSTINGER_LINK = 'https://www.hostinger.com/pricing?REFERRALCODE=3SXNICKDA0EC';
 const BLUEHOST_LINK = 'https://bluehost.sjv.io/5k0d52';
-
-// ─── Hostinger product info (real data from hostinger.com/pricing) ───────────
-const HOSTINGER_PLANS = [
-  { name: 'Premium', price: '$2.99/mo', sites: '3 websites', storage: '20 GB SSD', backups: 'Weekly', extras: 'Free domain, 2 mailboxes, CDN, free SSL' },
-  { name: 'Unlimited', price: '$3.79/mo', sites: 'Unlimited websites', storage: '50 GB NVMe', backups: 'Daily', extras: 'Free domain, unlimited mailboxes, CDN, AI email marketing' },
-  { name: 'Cloud Startup', price: '$7.99/mo', sites: 'Unlimited websites', storage: '100 GB NVMe', backups: 'Daily + on-demand', extras: 'Dedicated IP, 4 CPU cores, 4 GB RAM' },
-];
-
-const HOSTINGER_USE_CASES = ['portfolio site', 'small business website', 'WordPress blog', 'ecommerce store', 'SaaS landing page', 'freelancer website'];
-const SITE_URL = 'https://hostingreviews.online';
-const USE_CASE_PAGES = {
-  'portfolio site': '/services/portfolio-website/',
-  'small business website': '/services/small-business-website/',
-  'WordPress blog': '/services/wordpress-hosting/',
-  'ecommerce store': '/services/online-store/',
-  'SaaS landing page': '/services/startup-website/',
-  'freelancer website': '/services/personal-website/',
-};
-const HOSTINGER_COUPONS_PATHS = [
-  path.join(__dirname, '..', 'hostingerbot', 'data', 'seen_codes.json'),
-  path.join(__dirname, 'hostinger-coupons.json'),
-];
-
-function loadHostingerCoupons() {
-  for (const fp of HOSTINGER_COUPONS_PATHS) {
-    try {
-      const data = JSON.parse(fs.readFileSync(fp, 'utf-8'));
-      const coupons = Object.entries(data)
-        .map(([code, info]) => ({ code, ...info }))
-        .sort((a, b) => new Date(b.last_seen) - new Date(a.last_seen));
-      const recent = coupons.filter(c => {
-        const age = Date.now() - new Date(c.last_seen).getTime();
-        return age < 7 * 24 * 60 * 60 * 1000;
-      });
-      return recent.length > 0 ? recent : coupons.slice(0, 5);
-    } catch { continue; }
-  }
-  return [];
-}
-
-function formatCouponSection(coupons, limit = 3) {
-  if (coupons.length === 0) return '';
-  const top = coupons.slice(0, limit);
-  let section = '\n\n**Latest Hostinger coupon codes:**\n\n';
-  section += '| Code | Deal |\n|------|------|\n';
-  for (const c of top) {
-    section += `| **${c.code}** | ${c.title} |\n`;
-  }
-  section += `\nApply at checkout: [Hostinger pricing](${HOSTINGER_LINK}) | [Full hosting guides](${SITE_URL})`;
-  return section;
-}
 
 // ─── Base44 product info (real data from base44.com) ─────────────────────────
 const BASE44_FEATURES = [
@@ -595,7 +543,7 @@ async function fetchAllTopActors(limit = 200) {
 // ─── State management ─────────────────────────────────────────────────────────
 
 // Platform rotation: Apify, APILayer, Base44, APILayer, Base44 (1:2:2)
-const PLATFORM_ROTATION = ['apilayer', 'bluehost', 'hostinger', 'apify', 'apilayer', 'bluehost', 'hostinger', 'apify'];
+const PLATFORM_ROTATION = ['apilayer', 'bluehost', 'apify', 'apilayer', 'bluehost', 'apify'];
 
 function loadState() {
   try {
@@ -774,62 +722,6 @@ function generateBase44Post(state) {
   }
 }
 
-function pickHostPostType(state) {
-  const types = ['planCompare', 'useCase', 'whySwitch'];
-  if (!state.hostTypeQueue || state.hostTypeQueue.length === 0) {
-    state.hostTypeQueue = types.slice().sort(() => Math.random() - 0.5);
-  }
-  return state.hostTypeQueue.shift();
-}
-
-function generateHostingerPost(state) {
-  const type = pickHostPostType(state);
-  console.log(`Generating Hostinger ${type} post...`);
-  const coupons = loadHostingerCoupons();
-  const couponSection = formatCouponSection(coupons);
-  console.log(`Loaded ${coupons.length} coupons`);
-
-  if (type === 'planCompare') {
-    return {
-      title: 'Hostinger Plans Compared — Which One Do You Actually Need?',
-      text: `Hostinger has 3 main plans and they're all cheap, but here's which one actually makes sense for different use cases.\n\n| Plan | Price | Websites | Storage | Best For |\n|------|-------|----------|---------|----------|\n| Premium | $2.99/mo | 3 | 20 GB SSD | Personal sites, blogs |\n| Unlimited | $3.79/mo | Unlimited | 50 GB NVMe | Freelancers, growing brands |\n| Cloud Startup | $7.99/mo | Unlimited | 100 GB NVMe | Agencies, high-traffic sites |\n\nAll plans include free domain (1 year), free SSL, CDN, WordPress one-click install, and 24/7 support.\n\nThe **Unlimited** plan at $3.79/mo is the sweet spot for most people — unlimited sites, daily backups, and unlimited mailboxes.${couponSection}\n\n[Read our full hosting comparison guide](${SITE_URL}/services/start-a-blog/)`,
-      commentLink: SITE_URL,
-      flair: 'Resource',
-      type: 'planCompare',
-      platform: 'hostinger'
-    };
-  }
-
-  if (type === 'useCase') {
-    if (!state.hostPostedUseCases) state.hostPostedUseCases = [];
-    const unposted = HOSTINGER_USE_CASES.filter(u => !state.hostPostedUseCases.includes(u));
-    const useCases = unposted.length > 0 ? unposted : HOSTINGER_USE_CASES;
-    if (unposted.length === 0) state.hostPostedUseCases = [];
-    const uc = useCases[Math.floor(Math.random() * useCases.length)];
-    state.hostPostedUseCases.push(uc);
-    const ucTitle = uc.charAt(0).toUpperCase() + uc.slice(1);
-    return {
-      title: `How to Launch ${/^[aeiou]/i.test(ucTitle) ? 'an' : 'a'} ${ucTitle} for Under $3/Month with Hostinger`,
-      text: `If you need a ${uc}, you don't need to spend $20+/month on hosting. Hostinger's Premium plan starts at $2.99/mo and includes everything you need.\n\n**What you get:**\n- Free domain for 1 year\n- Free SSL certificate\n- WordPress one-click install\n- Built-in CDN for speed\n- Drag-and-drop website builder\n- Vibe coding — describe what you want, AI builds it\n- 24/7 priority support\n\n**Why it works for a ${uc}:**\n- NVMe storage keeps your site fast\n- 99.9% uptime guarantee\n- Free email (hello@yourdomain.com)\n- Built-in ecommerce if you need it${couponSection}\n\n30-day money-back guarantee, so no risk to try it.\n\n[Read our full ${uc} hosting guide](${SITE_URL}${USE_CASE_PAGES[uc] || '/'})`,
-      commentLink: `${SITE_URL}${USE_CASE_PAGES[uc] || '/'}`,
-      flair: 'Resource',
-      type: 'useCase',
-      platform: 'hostinger'
-    };
-  }
-
-  if (type === 'whySwitch') {
-    return {
-      title: 'Why I Switched to Hostinger — Honest Take After Using It for Months',
-      text: `I've used a few hosting providers and Hostinger has the best value for the price. Here's what stood out:\n\n**Pros:**\n- $2.99/mo for the Premium plan (3 sites, 20 GB, free domain)\n- NVMe storage on higher plans — noticeably faster than regular SSD\n- Free SSL on all plans, no extra config\n- WordPress install takes 60 seconds\n- Vibe coding feature — describe your site in plain English and AI builds it\n- 24/7 support actually responds fast\n\n**What's included free:**\n- Domain (1 year)\n- SSL certificate\n- CDN\n- Website builder\n- Email accounts\n- Weekly/daily backups depending on plan\n\n**Who it's best for:**\n- Beginners launching their first site\n- Freelancers managing multiple client sites\n- Small businesses that don't want to overpay${couponSection}\n\n30-day money-back guarantee on all plans.\n\n[Read our detailed hosting guides](${SITE_URL})`,
-      commentLink: SITE_URL,
-      flair: 'Resource',
-      type: 'whySwitch',
-      platform: 'hostinger'
-    };
-  }
-}
-
 // ─── Bluehost posts ──────────────────────────────────────────────────────────
 
 const BLUEHOST_USE_CASES = ['WordPress blog', 'small business website', 'online store', 'portfolio site', 'membership site', 'affiliate marketing site', 'agency website', 'podcast website'];
@@ -902,7 +794,7 @@ async function generatePost(state, index) {
   const totalIndex = (state.postCount || 0) + (index || 0);
   const platform = PLATFORM_ROTATION[totalIndex % PLATFORM_ROTATION.length];
   console.log(`Platform: ${platform}`);
-  if (platform === 'hostinger') return generateHostingerPost(state);
+  // apilayer, bluehost, apify only
   if (platform === 'bluehost') return generateBluehostPost(state);
   if (platform === 'base44') return generateBase44Post(state);
   if (platform === 'apilayer') return generateAPILayerPost(state);
@@ -949,9 +841,9 @@ async function main() {
         if (post.platform === 'apilayer') {
           commentText = `**Direct link:** ${post.commentLink}\n\n` +
             `*[APILayer](${APILAYER_SIGNUP}) — 40+ production-ready APIs, one account, one key. Free to start.*`;
-        } else if (post.platform === 'hostinger') {
-          commentText = `**Read our guides:** ${post.commentLink}\n\n` +
-            `*Hosting Reviews — Step-by-step guides to getting your website online. Hosting from $2.99/mo.*`;
+        } else if (post.platform === 'bluehost') {
+          commentText = `**Get started:** ${post.commentLink}\n\n` +
+            `*Bluehost — WordPress recommended hosting from $2.95/mo. Free domain, SSL, and CDN included.*`;
         } else if (post.platform === 'base44') {
           commentText = `**Try it free:** ${BASE44_LINK}\n\n` +
             `*Base44 — Build full apps by describing what you want. No coding needed.*`;

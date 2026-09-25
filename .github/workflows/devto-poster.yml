@@ -34,9 +34,6 @@ jobs:
           restore-keys: |
             devto-poster-state-
 
-      - name: Sync Hostinger coupons
-        run: node sync-coupons.js
-
       - name: Publish APILayer articles
         env:
           DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
@@ -53,7 +50,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add _posts/ hostinger-coupons.json
+          git add _posts/
           if git diff --staged --quiet; then
             echo "No new posts or coupon updates to commit"
           else

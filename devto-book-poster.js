@@ -7,58 +7,9 @@ const DEVTO_API_KEY = process.env.DEVTO_BOOK_API_KEY || '';
 const GROQ_API_KEY = process.env.GROQ_API_KEY || '';
 const AMAZON_TAG = 'nicdav09-20';
 
-const HOSTINGER_LINK = 'https://www.hostinger.com/pricing?REFERRALCODE=3SXNICKDA0EC';
-const SITE_URL = 'https://hostingreviews.online';
 const POSTS_PER_RUN = 2;
 const DELAY_BETWEEN_POSTS = 310000; // 5+ min
 const STATE_FILE = path.join(__dirname, '.devto-book-state.json');
-
-const HOSTINGER_USE_CASES = ['portfolio site', 'small business website', 'WordPress blog', 'ecommerce store', 'SaaS landing page', 'freelancer website', 'developer blog', 'side project', 'documentation site', 'newsletter site'];
-const USE_CASE_PAGES = {
-  'portfolio site': '/services/portfolio-website/',
-  'small business website': '/services/small-business-website/',
-  'WordPress blog': '/services/wordpress-hosting/',
-  'ecommerce store': '/services/online-store/',
-  'SaaS landing page': '/services/startup-website/',
-  'freelancer website': '/services/personal-website/',
-  'developer blog': '/services/start-a-blog/',
-  'side project': '/services/startup-website/',
-  'documentation site': '/services/start-a-blog/',
-  'newsletter site': '/services/start-a-blog/',
-};
-const HOSTINGER_COUPONS_PATHS = [
-  path.join(__dirname, '..', 'hostingerbot', 'data', 'seen_codes.json'),
-  path.join(__dirname, 'hostinger-coupons.json'),
-];
-
-function loadHostingerCoupons() {
-  for (const fp of HOSTINGER_COUPONS_PATHS) {
-    try {
-      const data = JSON.parse(fs.readFileSync(fp, 'utf-8'));
-      const coupons = Object.entries(data)
-        .map(([code, info]) => ({ code, ...info }))
-        .sort((a, b) => new Date(b.last_seen) - new Date(a.last_seen));
-      const recent = coupons.filter(c => {
-        const age = Date.now() - new Date(c.last_seen).getTime();
-        return age < 7 * 24 * 60 * 60 * 1000;
-      });
-      return recent.length > 0 ? recent : coupons.slice(0, 5);
-    } catch { continue; }
-  }
-  return [];
-}
-
-function formatCouponSection(coupons, limit = 3) {
-  if (coupons.length === 0) return '';
-  const top = coupons.slice(0, limit);
-  let section = '\n\n## Latest Hostinger Coupon Codes\n\n';
-  section += '| Code | Deal |\n|------|------|\n';
-  for (const c of top) {
-    section += `| **${c.code}** | ${c.title} |\n`;
-  }
-  section += `\nApply at checkout: **[Hostinger pricing](${HOSTINGER_LINK})** | **[Full hosting guides](${SITE_URL})**`;
-  return section;
-}
 
 function amazonLink(asin) {
   return `https://www.amazon.com/dp/${asin}?tag=${AMAZON_TAG}`;
@@ -648,80 +599,6 @@ async function generateArticle(state) {
   }
 }
 
-// ─── Hostinger articles ──────────────────────────────────────────────────────
-
-function pickHostArticleType(state) {
-  const types = ['planGuide', 'useCase', 'whySwitch', 'devHosting', 'deployGuide'];
-  if (!state.hostTypeQueue || state.hostTypeQueue.length === 0) {
-    state.hostTypeQueue = types.slice().sort(() => Math.random() - 0.5);
-  }
-  return state.hostTypeQueue.shift();
-}
-
-function generateHostingerArticle(state) {
-  const type = pickHostArticleType(state);
-  console.log(`Generating Hostinger ${type} article...`);
-  const coupons = loadHostingerCoupons();
-  const couponSection = formatCouponSection(coupons);
-
-  if (type === 'planGuide') {
-    return {
-      title: 'Hostinger Plans Compared: Which One Do Developers Actually Need?',
-      body: `Choosing a hosting plan shouldn't be complicated. Here's a breakdown of Hostinger's plans so you can pick the right one.\n\n## Plan Comparison\n\n| Plan | Price | Websites | Storage | Backups | Best For |\n|------|-------|----------|---------|---------|----------|\n| Premium | $2.99/mo | 3 | 20 GB SSD | Weekly | Personal sites, blogs |\n| Unlimited | $3.79/mo | Unlimited | 50 GB NVMe | Daily | Freelancers, multiple projects |\n| Cloud Startup | $7.99/mo | Unlimited | 100 GB NVMe | Daily + on-demand | High-traffic sites, agencies |\n\n## What All Plans Include\n\n- Free domain for 1 year\n- Free SSL certificate\n- CDN for global speed\n- WordPress one-click install\n- Drag-and-drop website builder\n- 24/7 priority support\n- 99.9% uptime guarantee\n\n## My Pick\n\nThe **Unlimited plan at $3.79/mo** is the sweet spot for developers. Unlimited websites, daily backups, NVMe storage, and unlimited mailboxes. Perfect for running side projects alongside client work.${couponSection}\n\n30-day money-back guarantee on all plans.\n\n**[See Hostinger plans →](${HOSTINGER_LINK})** | **[Read our hosting guides →](${SITE_URL})**`,
-      tags: ['webdev', 'hosting', 'beginners', 'tutorial'],
-      series: 'Web Hosting for Developers',
-      platform: 'hostinger',
-    };
-  }
-
-  if (type === 'useCase') {
-    if (!state.hostPostedUseCases) state.hostPostedUseCases = [];
-    const unposted = HOSTINGER_USE_CASES.filter(u => !state.hostPostedUseCases.includes(u));
-    const useCases = unposted.length > 0 ? unposted : HOSTINGER_USE_CASES;
-    if (unposted.length === 0) state.hostPostedUseCases = [];
-    const uc = useCases[Math.floor(Math.random() * useCases.length)];
-    state.hostPostedUseCases.push(uc);
-    const ucTitle = uc.charAt(0).toUpperCase() + uc.slice(1);
-    return {
-      title: `How to Launch ${/^[aeiou]/i.test(ucTitle) ? 'an' : 'a'} ${ucTitle} for Under $3/Month`,
-      body: `You don't need expensive hosting to launch a ${uc}. Here's how to get one live in under an hour for $2.99/mo.\n\n## What You Need\n\n1. **A domain** — Hostinger includes one free for the first year\n2. **Hosting** — The Premium plan ($2.99/mo) is enough to start\n3. **A platform** — WordPress (one-click install) or Hostinger's drag-and-drop builder\n\n## Quick Setup\n\n### 1. Pick Your Plan\n\nFor a ${uc}, the **Premium plan** works great. 20 GB SSD storage, free SSL, CDN, and 24/7 support.\n\nIf you'll add more sites later, the **Unlimited plan** ($3.79/mo) gives you unlimited websites and daily backups.\n\n### 2. Register Your Domain\n\nPick a domain during checkout — free for the first year with WHOIS privacy.\n\n### 3. Install WordPress or Use the Builder\n\nOne-click WordPress install, or use the drag-and-drop builder for something simpler.\n\n### 4. Go Live\n\nActivate SSL (free), enable CDN, and you're live in 30-60 minutes.\n\n## Why Hostinger\n\n- NVMe storage on higher plans\n- 99.9% uptime guarantee\n- Node.js support + SSH access\n- Free automatic website migration\n- 30-day money-back guarantee${couponSection}\n\n**[Get started →](${HOSTINGER_LINK})** | **[Read our ${uc} guide →](${SITE_URL}${USE_CASE_PAGES[uc] || '/'})**`,
-      tags: ['webdev', 'hosting', 'beginners', 'tutorial'],
-      series: 'Web Hosting for Developers',
-      platform: 'hostinger',
-    };
-  }
-
-  if (type === 'whySwitch') {
-    return {
-      title: 'Why I Switched to Hostinger — Honest Developer Review',
-      body: `I've tried multiple hosting providers. Here's why Hostinger is my current recommendation for developers.\n\n## What Stands Out\n\n### Price-to-Value\n\nStarting at $2.99/mo, you get more than most hosts charge $10+/mo for:\n- Free domain (1 year)\n- Free SSL\n- CDN included\n- WordPress one-click install\n- Email accounts\n\n### NVMe Storage\n\nUnlimited ($3.79/mo) and Cloud Startup ($7.99/mo) plans use NVMe — noticeably faster than regular SSD.\n\n### Developer Features\n\n- Node.js support\n- SSH access\n- Git integration\n- Multiple PHP versions\n- WP-CLI support\n\n## Plan Breakdown\n\n| Plan | Price | Storage | Websites | Key Feature |\n|------|-------|---------|----------|-------------|\n| Premium | $2.99/mo | 20 GB SSD | 3 | Best starting point |\n| Unlimited | $3.79/mo | 50 GB NVMe | Unlimited | Best value |\n| Cloud Startup | $7.99/mo | 100 GB NVMe | Unlimited | Best performance |\n\n## Who Should Use It\n\n- **Beginners** launching a first site\n- **Freelancers** managing multiple client sites\n- **Side project builders** who need cheap reliable hosting\n- **Developers** who want Node.js + WordPress on the same host\n\n30-day money-back guarantee.${couponSection}\n\n**[Check Hostinger plans →](${HOSTINGER_LINK})** | **[Read our guides →](${SITE_URL})**`,
-      tags: ['webdev', 'hosting', 'review', 'productivity'],
-      series: 'Web Hosting for Developers',
-      platform: 'hostinger',
-    };
-  }
-
-  if (type === 'devHosting') {
-    return {
-      title: 'Best Cheap Hosting for Developer Side Projects in 2026',
-      body: `Every developer has side projects that need a home. Here's why Hostinger is my go-to for hosting them cheaply.\n\n## The Developer Setup\n\nHostinger's Unlimited plan ($3.79/mo) lets you host unlimited websites on one account. That means all your side projects, experiments, and client demos under one plan.\n\n## What You Get\n\n- **Unlimited websites** on one plan\n- **NVMe storage** — 50 GB, fast enough for any project\n- **Node.js support** — run Express, Next.js SSR, or any Node app\n- **SSH access** — deploy via command line\n- **Git integration** — push to deploy\n- **Free SSL** on every domain\n- **Daily backups** — never lose a project\n\n## Perfect For\n\n- Portfolio sites\n- Blog or documentation sites\n- API landing pages\n- WordPress prototypes\n- Client demos before going to production hosting\n\n## Pricing\n\n| Plan | Price | Websites | Storage |\n|------|-------|----------|---------||\n| Premium | $2.99/mo | 3 | 20 GB SSD |\n| Unlimited | $3.79/mo | Unlimited | 50 GB NVMe |\n| Cloud Startup | $7.99/mo | Unlimited | 100 GB NVMe |${couponSection}\n\n**[Get Hostinger →](${HOSTINGER_LINK})** | **[Hosting guides →](${SITE_URL})**`,
-      tags: ['webdev', 'hosting', 'programming', 'productivity'],
-      series: 'Web Hosting for Developers',
-      platform: 'hostinger',
-    };
-  }
-
-  if (type === 'deployGuide') {
-    return {
-      title: 'Deploy Your First Website in 30 Minutes with Hostinger',
-      body: `Going from zero to a live website shouldn't take all day. Here's a quick walkthrough using Hostinger.\n\n## Step 1: Get a Plan\n\nGrab the **Premium plan** ($2.99/mo) or **Unlimited** ($3.79/mo) if you want room to grow.\n\nBoth include a free domain for year one, free SSL, and CDN.\n\n## Step 2: Set Up Your Domain\n\nRegister your domain during checkout (free) or connect an existing one. WHOIS privacy is included.\n\n## Step 3: Choose Your Stack\n\n**Option A — WordPress**\nOne-click install from the control panel. Thousands of themes and plugins. Best for blogs, business sites, and stores.\n\n**Option B — Website Builder**\nDrag-and-drop, no code needed. Good for landing pages and simple sites.\n\n**Option C — Custom Code**\nUpload via SSH/SFTP or use Git integration. Node.js, PHP, Python supported.\n\n## Step 4: Configure\n\n- Enable SSL (free, one click)\n- Turn on CDN\n- Set up email (yourname@yourdomain.com)\n- Enable automatic backups\n\n## Step 5: Go Live\n\nYour site is up. Total time: 20-30 minutes.\n\n## Why Hostinger\n\n- Starts at $2.99/mo\n- NVMe storage on Unlimited+\n- 99.9% uptime guarantee\n- 30-day money-back guarantee${couponSection}\n\n**[Start your site →](${HOSTINGER_LINK})** | **[Full guides →](${SITE_URL})**`,
-      tags: ['webdev', 'hosting', 'beginners', 'tutorial'],
-      series: 'Web Hosting for Developers',
-      platform: 'hostinger',
-    };
-  }
-}
-
 // ─── Dev.to publish ─────────────────────────────────────────────────────────
 
 async function publishArticle(title, body, tags, series) {
@@ -798,15 +675,10 @@ async function main() {
 
   const state = loadState();
 
-  if (!state.contentIndex) state.contentIndex = 0;
-
   for (let i = 0; i < count; i++) {
     console.log(`\n--- Article ${i + 1}/${count} ---`);
 
-    // Every 4th article is Hostinger, rest are books
-    const isHostinger = state.contentIndex % 4 === 3;
-    state.contentIndex++;
-    const article = isHostinger ? generateHostingerArticle(state) : await generateArticle(state);
+    const article = await generateArticle(state);
     console.log(`Title: ${article.title}`);
     console.log(`Tags: ${article.tags.join(', ')}`);
 
