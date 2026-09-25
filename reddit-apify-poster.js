@@ -15,6 +15,7 @@ const GITHUB_REPO = 'https://github.com/p32nicky/apify-actors-directory';
 const APILAYER_SIGNUP = `https://apilayer.com?fpr=${APILAYER_AFFILIATE_ID}`;
 const BASE44_LINK = 'https://base44.pxf.io/c/2252709/2049275/25619?trafcat=base';
 const HOSTINGER_LINK = 'https://www.hostinger.com/pricing?REFERRALCODE=3SXNICKDA0EC';
+const BLUEHOST_LINK = 'https://bluehost.sjv.io/5k0d52';
 
 // ─── Hostinger product info (real data from hostinger.com/pricing) ───────────
 const HOSTINGER_PLANS = [
@@ -594,7 +595,7 @@ async function fetchAllTopActors(limit = 200) {
 // ─── State management ─────────────────────────────────────────────────────────
 
 // Platform rotation: Apify, APILayer, Base44, APILayer, Base44 (1:2:2)
-const PLATFORM_ROTATION = ['apilayer', 'apify', 'apilayer', 'apify', 'apilayer'];
+const PLATFORM_ROTATION = ['apilayer', 'bluehost', 'hostinger', 'apify', 'apilayer', 'bluehost', 'hostinger', 'apify'];
 
 function loadState() {
   try {
@@ -829,11 +830,80 @@ function generateHostingerPost(state) {
   }
 }
 
+// ─── Bluehost posts ──────────────────────────────────────────────────────────
+
+const BLUEHOST_USE_CASES = ['WordPress blog', 'small business website', 'online store', 'portfolio site', 'membership site', 'affiliate marketing site', 'agency website', 'podcast website'];
+
+function pickBluehostPostType(state) {
+  const types = ['planGuide', 'useCase', 'whyBluehost', 'wordpress'];
+  if (!state.bluehostTypeQueue || state.bluehostTypeQueue.length === 0) {
+    state.bluehostTypeQueue = types.slice().sort(() => Math.random() - 0.5);
+  }
+  return state.bluehostTypeQueue.shift();
+}
+
+function generateBluehostPost(state) {
+  const type = pickBluehostPostType(state);
+  console.log(`Generating Bluehost ${type} post...`);
+
+  if (type === 'planGuide') {
+    return {
+      title: 'Bluehost Plans Compared — Which One Do You Actually Need?',
+      text: `Breaking down Bluehost's plans so you don't overpay:\n\n**Basic ($2.95/mo)** — 1 website, 10 GB SSD, free domain, free SSL, 1 email\n\n**Choice Plus ($5.45/mo)** — Unlimited websites, 40 GB SSD, domain privacy, automated backups, unlimited email\n\n**Online Store ($9.95/mo)** — Everything in Choice Plus + WooCommerce, unlimited products, payment processing\n\n**Pro ($13.95/mo)** — 100 GB SSD, dedicated IP, optimized CPU\n\n**All plans include:**\n- Free domain (1 year)\n- Free SSL\n- Free CDN\n- WordPress auto-install\n- 24/7 support\n- 30-day money-back guarantee\n\n**My pick:** Choice Plus at $5.45/mo — unlimited sites, backups included, and domain privacy saves you $12/year.\n\n[See all Bluehost plans](${BLUEHOST_LINK})`,
+      commentLink: BLUEHOST_LINK,
+      flair: 'Resource',
+      type: 'planGuide',
+      platform: 'bluehost'
+    };
+  }
+
+  if (type === 'useCase') {
+    if (!state.bluehostPostedUseCases) state.bluehostPostedUseCases = [];
+    const unposted = BLUEHOST_USE_CASES.filter(u => !state.bluehostPostedUseCases.includes(u));
+    const useCases = unposted.length > 0 ? unposted : BLUEHOST_USE_CASES;
+    if (unposted.length === 0) state.bluehostPostedUseCases = [];
+    const uc = useCases[Math.floor(Math.random() * useCases.length)];
+    state.bluehostPostedUseCases.push(uc);
+    const ucTitle = uc.charAt(0).toUpperCase() + uc.slice(1);
+    return {
+      title: `How to Launch ${/^[aeiou]/i.test(ucTitle) ? 'an' : 'a'} ${ucTitle} with Bluehost for $2.95/mo`,
+      text: `Setting up a ${uc} is easier than you think. Here's the quick version:\n\n1. **Get Bluehost Basic ($2.95/mo)** — includes free domain, SSL, and CDN\n2. **Install WordPress** — one-click from the dashboard\n3. **Pick a theme** — thousands of free options\n4. **Go live** — takes about 30 minutes total\n\nIf you need more than one site, grab **Choice Plus ($5.45/mo)** for unlimited websites and automated backups.\n\nAll plans come with 24/7 support and a 30-day money-back guarantee.\n\n[Get started with Bluehost](${BLUEHOST_LINK})`,
+      commentLink: BLUEHOST_LINK,
+      flair: 'Resource',
+      type: 'useCase',
+      platform: 'bluehost'
+    };
+  }
+
+  if (type === 'whyBluehost') {
+    return {
+      title: 'Why Bluehost Is Still the Go-To for WordPress Hosting',
+      text: `Bluehost is officially recommended by WordPress.org. Here's why it still holds up:\n\n**What you get for $2.95/mo:**\n- Free domain (1 year)\n- Free SSL certificate\n- Free CDN\n- WordPress pre-installed\n- 24/7 expert support\n- 10 GB SSD storage\n\n**Best features:**\n- WordPress auto-updates\n- Staging environment (Choice Plus+)\n- WooCommerce integration for stores\n- cPanel for advanced control\n- 99.9% uptime guarantee\n\n**Who should use it:**\n- Anyone starting a WordPress site\n- Bloggers and content creators\n- Small businesses\n- Online store owners (WooCommerce)\n\n30-day money-back guarantee on all plans.\n\n[Check out Bluehost](${BLUEHOST_LINK})`,
+      commentLink: BLUEHOST_LINK,
+      flair: 'Resource',
+      type: 'whyBluehost',
+      platform: 'bluehost'
+    };
+  }
+
+  if (type === 'wordpress') {
+    return {
+      title: 'Best Way to Set Up WordPress in 2026 — Step by Step',
+      text: `If you're starting a WordPress site, here's the fastest setup:\n\n**Step 1: Get hosting**\nBluehost Basic is $2.95/mo with a free domain and WordPress pre-installed.\n\n**Step 2: Choose a theme**\nFree themes work great to start. Astra, GeneratePress, and Flavor are solid picks.\n\n**Step 3: Install essential plugins**\n- Yoast SEO (search optimization)\n- WPForms (contact forms)\n- WooCommerce (if selling)\n- UpdraftPlus (backups)\n\n**Step 4: Set up pages**\nHome, About, Contact, Blog — the basics. WordPress makes this drag-and-drop easy.\n\n**Step 5: Launch**\nEnable SSL (free with Bluehost), submit to Google Search Console, and go live.\n\nTotal time: 30-60 minutes. Total cost: $2.95/mo.\n\n[Get Bluehost + WordPress](${BLUEHOST_LINK})`,
+      commentLink: BLUEHOST_LINK,
+      flair: 'Resource',
+      type: 'wordpress',
+      platform: 'bluehost'
+    };
+  }
+}
+
 async function generatePost(state, index) {
   const totalIndex = (state.postCount || 0) + (index || 0);
   const platform = PLATFORM_ROTATION[totalIndex % PLATFORM_ROTATION.length];
   console.log(`Platform: ${platform}`);
   if (platform === 'hostinger') return generateHostingerPost(state);
+  if (platform === 'bluehost') return generateBluehostPost(state);
   if (platform === 'base44') return generateBase44Post(state);
   if (platform === 'apilayer') return generateAPILayerPost(state);
   return generateApifyPost(state);

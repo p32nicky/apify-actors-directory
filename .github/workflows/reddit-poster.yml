@@ -2,8 +2,10 @@ name: Reddit Auto-Poster
 
 on:
   schedule:
-    - cron: '0 14 * * *'  # 10 AM ET (UTC-4)
-  workflow_dispatch:       # manual trigger from GitHub UI
+    - cron: '0 14 * * *'  # 10 AM ET
+    - cron: '0 19 * * *'  # 3 PM ET
+    - cron: '0 0 * * *'   # 8 PM ET
+  workflow_dispatch:
 
 jobs:
   post:
