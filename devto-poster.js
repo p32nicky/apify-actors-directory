@@ -12,7 +12,9 @@ const APILAYER_SIGNUP = `https://apilayer.com?fpr=${APILAYER_AFFILIATE_ID}`;
 const BASE44_LINK = 'https://base44.pxf.io/c/2252709/2049275/25619?trafcat=base';
 const HOSTINGER_LINK = 'https://www.hostinger.com/pricing?REFERRALCODE=3SXNICKDA0EC';
 
-const PLATFORM_ROTATION = ['apilayer', 'apilayer', 'apilayer', 'apilayer', 'apilayer'];
+const BLUEHOST_LINK = 'https://bluehost.sjv.io/5k0d52';
+
+const PLATFORM_ROTATION = ['apilayer', 'bluehost', 'apilayer', 'bluehost', 'apilayer'];
 
 const HOSTINGER_PLANS = [
   { name: 'Premium', price: '$2.99/mo', sites: '3 websites', storage: '20 GB SSD', backups: 'Weekly', extras: 'Free domain, 2 mailboxes, CDN, free SSL' },
@@ -840,12 +842,140 @@ function generateHostingerArticle(state) {
   }
 }
 
+// ─── Bluehost articles ────────────────────────────────────────────────────
+
+const BLUEHOST_PLANS = [
+  { name: 'Basic', price: '$2.95/mo', sites: '1 website', storage: '10 GB SSD', extras: 'Free domain (1 year), free CDN, free SSL, 1 email' },
+  { name: 'Choice Plus', price: '$5.45/mo', sites: 'Unlimited websites', storage: '40 GB SSD', extras: 'Free domain, unlimited email, domain privacy, automated backups' },
+  { name: 'Online Store', price: '$9.95/mo', sites: 'Unlimited websites', storage: '40 GB SSD', extras: 'All Choice Plus features + WooCommerce, unlimited products, payment processing' },
+  { name: 'Pro', price: '$13.95/mo', sites: 'Unlimited websites', storage: '100 GB SSD', extras: 'Dedicated IP, optimized CPU, free domain privacy + backups' },
+];
+
+const BLUEHOST_USE_CASES = ['WordPress blog', 'small business website', 'online store', 'portfolio site', 'membership site', 'affiliate marketing site', 'agency website', 'podcast website', 'SaaS landing page', 'nonprofit website'];
+
+function pickBluehostArticleType(state) {
+  const types = ['planGuide', 'useCase', 'whyBluehost', 'vsCompetitor', 'wordpress'];
+  if (!state.bhTypeQueue || state.bhTypeQueue.length === 0) {
+    state.bhTypeQueue = types.slice().sort(() => Math.random() - 0.5);
+  }
+  return state.bhTypeQueue.shift();
+}
+
+function generateBluehostArticle(state) {
+  const type = pickBluehostArticleType(state);
+  console.log(`Generating Bluehost ${type} article...`);
+
+  if (type === 'planGuide') {
+    let body = `Picking the right Bluehost plan doesn't have to be complicated. Here's a straightforward breakdown.\n\n`;
+    body += `## Plan Comparison\n\n`;
+    body += `| Plan | Price | Websites | Storage | Best For |\n|------|-------|----------|---------|----------|\n`;
+    BLUEHOST_PLANS.forEach(p => {
+      body += `| ${p.name} | ${p.price} | ${p.sites} | ${p.storage} | ${p.extras.split(',')[0]} |\n`;
+    });
+    body += `\n## What All Plans Include\n\n`;
+    body += `- Free domain for 1 year\n- Free SSL certificate\n- Free CDN (Cloudflare)\n- 1-click WordPress install\n- 24/7 expert support\n- 30-day money-back guarantee\n\n`;
+    body += `## My Recommendation\n\n`;
+    body += `**Choice Plus at $5.45/mo** is the sweet spot for most people. Unlimited websites, domain privacy included, and automated backups.\n\n`;
+    body += `For an online store, go straight to the **Online Store plan** — WooCommerce is pre-installed with payment processing ready to go.\n\n`;
+    body += `**[Get started with Bluehost →](${BLUEHOST_LINK})**\n\n`;
+    body += `All plans come with a 30-day money-back guarantee, so there's zero risk trying it out.`;
+    return { title: 'Bluehost Plans Compared: Which One Do You Actually Need?', body, tags: ['webdev', 'hosting', 'beginners', 'wordpress'], series: 'Web Hosting Guides', platform: 'bluehost', type: 'planGuide' };
+  }
+
+  if (type === 'useCase') {
+    if (!state.bhPostedUseCases) state.bhPostedUseCases = [];
+    const unposted = BLUEHOST_USE_CASES.filter(u => !state.bhPostedUseCases.includes(u));
+    const useCases = unposted.length > 0 ? unposted : BLUEHOST_USE_CASES;
+    if (unposted.length === 0) state.bhPostedUseCases = [];
+    const uc = useCases[Math.floor(Math.random() * useCases.length)];
+    state.bhPostedUseCases.push(uc);
+    const ucTitle = uc.charAt(0).toUpperCase() + uc.slice(1);
+    let body = `Want to launch ${/^[aeiou]/i.test(ucTitle) ? 'an' : 'a'} ${uc}? Here's how to get one live today.\n\n`;
+    body += `## Why Bluehost for ${/^[aeiou]/i.test(ucTitle) ? 'an' : 'a'} ${ucTitle}\n\n`;
+    body += `Bluehost is officially recommended by WordPress.org — and for good reason. They handle all the technical setup so you can focus on content.\n\n`;
+    body += `## What You Get\n\n`;
+    body += `- **Free domain** for the first year\n- **1-click WordPress install** — literally one click\n- **Free SSL** — your site is secure from day one\n- **Free CDN** — fast loading globally via Cloudflare\n- **24/7 support** — chat, phone, or ticket\n\n`;
+    body += `## Step-by-Step\n\n`;
+    body += `### 1. Pick Your Plan\n\nFor a ${uc}, start with **Basic ($2.95/mo)** if it's your first site, or **Choice Plus ($5.45/mo)** for unlimited sites and automated backups.\n\n`;
+    body += `### 2. Register Your Domain\n\nFree for the first year. Pick something memorable and relevant.\n\n`;
+    body += `### 3. Install WordPress\n\nOne click in your dashboard. Bluehost pre-configures everything.\n\n`;
+    body += `### 4. Choose a Theme and Customize\n\nThousands of free WordPress themes. The built-in customizer makes it drag-and-drop.\n\n`;
+    body += `### 5. Go Live\n\nSSL is already active. Enable the free CDN for speed. You're live.\n\n`;
+    body += `**[Start your ${uc} with Bluehost →](${BLUEHOST_LINK})**\n\n`;
+    body += `30-day money-back guarantee on all plans.`;
+    return { title: `How to Start ${/^[aeiou]/i.test(ucTitle) ? 'an' : 'a'} ${ucTitle} with Bluehost in 2026`, body, tags: ['webdev', 'hosting', 'beginners', 'tutorial'], series: 'Web Hosting Guides', platform: 'bluehost', type: 'useCase' };
+  }
+
+  if (type === 'whyBluehost') {
+    let body = `I've tested a lot of hosting providers. Here's why Bluehost keeps winning for most use cases.\n\n`;
+    body += `## The WordPress.org Recommendation\n\nBluehost is one of only three hosts officially recommended by WordPress.org. That's not a paid placement — it's based on actual performance, reliability, and support quality.\n\n`;
+    body += `## What You Get for $2.95/mo\n\n`;
+    body += `- Free domain (1 year)\n- Free SSL certificate\n- Free Cloudflare CDN\n- 10 GB SSD storage\n- 1-click WordPress install\n- 24/7 support (chat, phone, email)\n- 30-day money-back guarantee\n\n`;
+    body += `## Standout Features\n\n`;
+    body += `### Staging Environment\nTest changes before pushing them live. Built right into the dashboard — no plugin needed.\n\n`;
+    body += `### Automatic Updates\nWordPress core, themes, and plugins update automatically. No more security patches piling up.\n\n`;
+    body += `### Built-in Caching\nServer-level caching is on by default. No need for a caching plugin on day one.\n\n`;
+    body += `### WooCommerce Ready\nThe Online Store plan ($9.95/mo) comes with WooCommerce pre-installed, payment processing configured, and unlimited products.\n\n`;
+    body += `## Plan Quick Reference\n\n`;
+    body += `| Plan | Price | Best For |\n|------|-------|----------|\n`;
+    body += `| Basic | $2.95/mo | First website |\n| Choice Plus | $5.45/mo | Multiple sites |\n| Online Store | $9.95/mo | Ecommerce |\n| Pro | $13.95/mo | High traffic |\n\n`;
+    body += `**[Get started with Bluehost →](${BLUEHOST_LINK})**`;
+    return { title: 'Why I Recommend Bluehost for WordPress in 2026', body, tags: ['webdev', 'hosting', 'wordpress', 'review'], series: 'Web Hosting Guides', platform: 'bluehost', type: 'whyBluehost' };
+  }
+
+  if (type === 'vsCompetitor') {
+    const competitors = [
+      { name: 'GoDaddy', con: 'aggressive upselling and hidden fees' },
+      { name: 'HostGator', con: 'slower support response times' },
+      { name: 'SiteGround', con: 'higher renewal prices' },
+      { name: 'Squarespace', con: 'less flexibility than WordPress' },
+      { name: 'Wix', con: 'limited SEO control and portability' },
+    ];
+    if (!state.bhPostedVs) state.bhPostedVs = [];
+    const unposted = competitors.filter(c => !state.bhPostedVs.includes(c.name));
+    const pool = unposted.length > 0 ? unposted : competitors;
+    if (unposted.length === 0) state.bhPostedVs = [];
+    const comp = pool[Math.floor(Math.random() * pool.length)];
+    state.bhPostedVs.push(comp.name);
+    let body = `Choosing between Bluehost and ${comp.name}? Here's a straightforward comparison.\n\n`;
+    body += `## Bluehost Advantages\n\n`;
+    body += `- **WordPress.org recommended** — officially endorsed\n- **Free domain** included for 1 year\n- **Free SSL + CDN** on all plans\n- **Starting at $2.95/mo** — competitive pricing\n- **1-click WordPress install** with staging environment\n- **24/7 support** via chat, phone, and tickets\n\n`;
+    body += `## ${comp.name} Downsides\n\nThe main issue with ${comp.name}: ${comp.con}. This can add up over time, especially if you're running multiple sites.\n\n`;
+    body += `## Pricing Comparison\n\n`;
+    body += `| Feature | Bluehost | ${comp.name} |\n|---------|----------|----------|\n`;
+    body += `| Starting Price | $2.95/mo | Varies |\n`;
+    body += `| Free Domain | Yes (1 year) | Varies |\n`;
+    body += `| Free SSL | Yes | Varies |\n`;
+    body += `| Free CDN | Yes (Cloudflare) | Usually no |\n`;
+    body += `| WordPress Recommended | Yes | No |\n\n`;
+    body += `## Bottom Line\n\nIf you're building with WordPress, Bluehost is the safer bet. Official WordPress recommendation, transparent pricing, and solid features at every tier.\n\n`;
+    body += `**[Try Bluehost risk-free (30-day guarantee) →](${BLUEHOST_LINK})**`;
+    return { title: `Bluehost vs ${comp.name}: Which Hosting Is Better in 2026?`, body, tags: ['webdev', 'hosting', 'beginners', 'review'], series: 'Web Hosting Guides', platform: 'bluehost', type: 'vsCompetitor' };
+  }
+
+  // wordpress
+  let body = `WordPress powers over 40% of the web, and Bluehost makes it dead simple to get started.\n\n`;
+  body += `## Why Bluehost + WordPress\n\nBluehost is one of only three hosts officially recommended by WordPress.org. The integration is seamless:\n\n`;
+  body += `- WordPress is **pre-installed** — no setup needed\n- **Automatic updates** for core, themes, and plugins\n- **Staging environment** built into the dashboard\n- **Server-level caching** for fast page loads\n- **Free SSL + CDN** on every plan\n\n`;
+  body += `## Getting Started in 5 Minutes\n\n`;
+  body += `1. **Sign up** at Bluehost (starting at $2.95/mo)\n2. **Pick your free domain** — included for 1 year\n3. **WordPress is ready** — it's already installed\n4. **Pick a theme** — thousands of free options\n5. **Start publishing** — you're live\n\n`;
+  body += `## Essential WordPress Plugins to Install\n\n`;
+  body += `- **Yoast SEO** — optimize every page for search engines\n- **Wordfence** — security scanning and firewall\n- **UpdraftPlus** — automated backups (Choice Plus plan includes this built-in)\n- **WP Super Cache** — though Bluehost's built-in caching may be enough\n\n`;
+  body += `## Which Plan for WordPress?\n\n`;
+  body += `| Use Case | Recommended Plan | Price |\n|----------|-----------------|-------|\n`;
+  body += `| Personal blog | Basic | $2.95/mo |\n| Business site | Choice Plus | $5.45/mo |\n| Online store | Online Store | $9.95/mo |\n| High traffic | Pro | $13.95/mo |\n\n`;
+  body += `**[Start your WordPress site with Bluehost →](${BLUEHOST_LINK})**\n\n`;
+  body += `30-day money-back guarantee. No risk.`;
+  return { title: 'How to Set Up WordPress with Bluehost: Complete Guide 2026', body, tags: ['webdev', 'wordpress', 'hosting', 'beginners'], series: 'Web Hosting Guides', platform: 'bluehost', type: 'wordpress' };
+}
+
 async function generateArticle(state, index) {
   const totalIndex = (state.postCount || 0) + (index || 0);
   const platform = PLATFORM_ROTATION[totalIndex % PLATFORM_ROTATION.length];
   console.log(`Platform: ${platform}`);
   if (platform === 'hostinger') return generateHostingerArticle(state);
   if (platform === 'base44') return generateBase44Article(state);
+  if (platform === 'bluehost') return generateBluehostArticle(state);
   if (platform === 'apilayer') return generateAPILayerArticle(state);
   return generateApifyArticle(state);
 }
