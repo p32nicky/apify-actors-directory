@@ -1,6 +1,6 @@
 {
-  "postCount": 59,
-  "lastRun": "2026-09-27T06:21:07.578Z",
+  "postCount": 61,
+  "lastRun": "2026-09-27T17:40:44.261Z",
   "reviewedBooks": [
     "1492034029",
     "0071843655",
@@ -17,7 +17,8 @@
     "0201633612",
     "1838430210",
     "0735619670",
-    "0262510871"
+    "0262510871",
+    "0321146530"
   ],
   "postedComparisons": [
     "interview-prep",
@@ -31,7 +32,8 @@
     "javascript",
     "security",
     "go-vs-rust",
-    "databases"
+    "databases",
+    "data-ml"
   ],
   "postedTopN": [
     "classics",
@@ -39,7 +41,16 @@
     "must-own",
     "leadership"
   ],
-  "typeQueue": [],
+  "typeQueue": [
+    "review",
+    "llm",
+    "llm",
+    "llm",
+    "llm",
+    "llm",
+    "llm",
+    "topN"
+  ],
   "usedLLMTopics": [
     172,
     164,
