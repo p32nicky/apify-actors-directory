@@ -1,6 +1,6 @@
 {
-  "postCount": 67,
-  "lastRun": "2026-09-27T23:44:07.283Z",
+  "postCount": 69,
+  "lastRun": "2026-09-28T06:25:17.902Z",
   "reviewedBooks": [
     "1492034029",
     "0071843655",
@@ -40,12 +40,10 @@
     "classics",
     "beginner",
     "must-own",
-    "leadership"
+    "leadership",
+    "thick-reads"
   ],
-  "typeQueue": [
-    "llm",
-    "topN"
-  ],
+  "typeQueue": [],
   "usedLLMTopics": [
     172,
     164,
@@ -75,7 +73,8 @@
     192,
     254,
     72,
-    252
+    252,
+    52
   ],
   "contentIndex": 2
 }
