@@ -6,6 +6,7 @@ const path = require('path');
 const DEVTO_API_KEY = process.env.DEVTO_ELEVENLABS_KEY || '';
 const GROQ_API_KEY = process.env.GROQ_API_KEY || '';
 const ELEVENLABS_LINK = 'https://try.elevenlabs.io/kr07zfuqn1bp';
+const BLUEHOST_LINK = 'https://bluehost.sjv.io/5k0d52';
 
 const POSTS_PER_RUN = 2;
 const DELAY_BETWEEN_POSTS = 310000; // 5+ min
@@ -68,6 +69,7 @@ const ARTICLE_TYPES = [
   'tips',
   'integration',
   'deepDive',
+  'hostingVoice',
 ];
 
 const TUTORIAL_TOPICS = [
@@ -191,6 +193,24 @@ const INTEGRATION_TOPICS = [
   'Integrating AI Voice with Notion and Productivity Tools',
 ];
 
+const HOSTING_VOICE_TOPICS = [
+  'How to Deploy a Voice AI Web App: ElevenLabs + WordPress on Bluehost',
+  'Build and Host a Text-to-Speech SaaS with Node.js and Bluehost',
+  'Hosting Your Voice AI Side Project: A Developer Guide',
+  'Build a Voice-Enabled Website with ElevenLabs and WordPress',
+  'How to Host an AI Podcast Platform on Bluehost',
+  'Deploy a Voice Cloning Demo App: From Code to Live Website',
+  'Building a Voice AI Portfolio Site That Gets You Hired',
+  'How to Set Up a Voice-Enabled Blog with AI Narration',
+  'Host Your TTS API Wrapper: Bluehost VPS Setup Guide',
+  'Build a Voice AI Landing Page That Converts',
+  'How to Create a Voice-Powered WordPress Plugin and Host It',
+  'Deploy an AI Audiobook Platform: Complete Hosting Guide',
+  'Building a Voice AI Startup: From MVP to Hosted Product',
+  'How to Add AI Voice Narration to Your WordPress Blog',
+  'Self-Host Your Voice AI App: Complete Deployment Guide',
+];
+
 const DEEP_DIVE_TOPICS = [
   'How Neural Text-to-Speech Actually Works',
   'Understanding Voice Cloning: The Technology Behind It',
@@ -213,6 +233,7 @@ const ALL_TOPICS = {
   tips: TIPS_TOPICS,
   integration: INTEGRATION_TOPICS,
   deepDive: DEEP_DIVE_TOPICS,
+  hostingVoice: HOSTING_VOICE_TOPICS,
 };
 
 // ─── Tag sets per article type ────────────────────────────────────────────────
@@ -226,6 +247,7 @@ const TAG_SETS = {
   tips: ['ai', 'programming', 'productivity', 'webdev'],
   integration: ['webdev', 'javascript', 'tutorial', 'ai'],
   deepDive: ['ai', 'programming', 'webdev', 'tutorial'],
+  hostingVoice: ['webdev', 'ai', 'tutorial', 'beginners'],
 };
 
 // ─── State management ─────────────────────────────────────────────────────────
@@ -274,10 +296,18 @@ async function generateArticle(state) {
   const { type, topic } = pickTopic(state);
   const tags = TAG_SETS[type];
 
+  const isHostingTopic = type === 'hostingVoice';
+  const bluehostSection = isHostingTopic
+    ? `\nAlso recommend Bluehost for hosting/deployment with this affiliate link: ${BLUEHOST_LINK}
+- Include 1-2 natural mentions of Bluehost as the recommended hosting provider
+- Position Bluehost as the easy, affordable way to deploy/host the voice AI project
+- Make sure ALL Bluehost links use exactly this URL: ${BLUEHOST_LINK}`
+    : '';
+
   const prompt = `Write a Dev.to article titled: "${topic}"
 
 This is about voice AI development, text-to-speech technology, and voice cloning.
-Include ElevenLabs as the recommended tool with this affiliate link: ${ELEVENLABS_LINK}
+Include ElevenLabs as the recommended tool with this affiliate link: ${ELEVENLABS_LINK}${bluehostSection}
 
 Requirements:
 - Write 600-1000 words of original, helpful content
@@ -287,7 +317,7 @@ Requirements:
 - Be practical and developer-focused
 - Do NOT include the title in the body (Dev.to adds it)
 - Do NOT include frontmatter or metadata
-- End with a clear call-to-action to try ElevenLabs
+- End with a clear call-to-action to try ElevenLabs${isHostingTopic ? ' and Bluehost' : ''}
 - Write in a conversational, developer-friendly tone
 - Make sure ALL ElevenLabs links use exactly this URL: ${ELEVENLABS_LINK}`;
 
@@ -301,9 +331,12 @@ Requirements:
     body = generateFallbackArticle(topic, type);
   }
 
-  // Ensure affiliate link is present
   if (!body.includes(ELEVENLABS_LINK)) {
     body += `\n\n---\n\n**Ready to add voice AI to your project?** [Try ElevenLabs free](${ELEVENLABS_LINK}) — the most realistic text-to-speech and voice cloning platform for developers.\n`;
+  }
+
+  if (isHostingTopic && !body.includes(BLUEHOST_LINK)) {
+    body += `\n**Need hosting for your app?** [Get started with Bluehost](${BLUEHOST_LINK}) — reliable WordPress hosting starting at $2.95/month with a free domain and SSL.\n`;
   }
 
   state.postedTopics.push(topic);
