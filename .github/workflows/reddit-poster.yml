@@ -2,9 +2,8 @@ name: Reddit Auto-Poster
 
 on:
   schedule:
-    - cron: '0 14 * * *'  # 10 AM ET
-    - cron: '0 19 * * *'  # 3 PM ET
-    - cron: '0 0 * * *'   # 8 PM ET
+    - cron: '0 15 * * *'  # 11 AM ET
+    - cron: '0 21 * * *'  # 5 PM ET
   workflow_dispatch:
 
 jobs:
@@ -34,4 +33,4 @@ jobs:
           REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
           REDDIT_SUBREDDIT: API_Finder
           APIFY_AFFILIATE_ID: '97nrp4'
-        run: node reddit-apify-poster.js --count=5
+        run: node reddit-apify-poster.js --count=2
