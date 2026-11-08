@@ -15,6 +15,8 @@ const GITHUB_REPO = 'https://github.com/p32nicky/apify-actors-directory';
 const APILAYER_SIGNUP = `https://apilayer.com?fpr=${APILAYER_AFFILIATE_ID}`;
 const BASE44_LINK = 'https://base44.pxf.io/c/2252709/2049275/25619?trafcat=base';
 const BLUEHOST_LINK = 'https://bluehost.sjv.io/5k0d52';
+const LOCALGAP_APIFY = 'https://apify.com/fine_lingo/local-gap-leads-actor';
+const LOCALGAP_SITE = 'https://localleadapi.netlify.app/';
 
 // ─── Base44 product info (real data from base44.com) ─────────────────────────
 const BASE44_FEATURES = [
@@ -722,6 +724,35 @@ function generateBase44Post(state) {
   }
 }
 
+// ─── LocalGap posts ─────────────────────────────────────────────────────────
+
+const LOCALGAP_POSTS = [
+  {
+    title: 'LocalGap — Find Local Businesses Without Websites and Turn Them Into Clients',
+    text: `**LocalGap Business Lead Finder** scans OpenStreetMap data to find local businesses with weak or missing digital presence — no website, unverified phone, poor online infrastructure.\n\nPerfect for:\n- Digital marketing agencies looking for prospects\n- Web designers who need clients\n- Cold emailers and lead gen specialists\n- Freelancers offering website services\n\n**How it works:**\n1. Pick a location (city, ZIP, coordinates)\n2. LocalGap scans real business data from OpenStreetMap\n3. Each lead gets a score based on missing website, phone verification, etc.\n4. Export to JSON/CSV/Excel for instant outreach\n\n**Key features:**\n- Hyper-local targeting with Overpass API\n- Automated lead scoring (0-100)\n- CRM-ready export formats\n- Zero third-party platform lock-in\n\nA business scoring 85/100 = no website, unverified phone — basically begging for your services.\n\n**[Run LocalGap on Apify](${LOCALGAP_APIFY})**\n\n*[Full product page + live simulator](${LOCALGAP_SITE})*`,
+  },
+  {
+    title: 'Stop Cold Emailing Random Businesses — This Apify Actor Finds Ones That Actually Need Help',
+    text: `Most lead gen tools give you a list of businesses. LocalGap gives you a list of businesses **that don't have websites**.\n\nThink about it — if a local business has no website in 2026, they need your services. That's a warm lead before you even reach out.\n\n**What LocalGap does:**\n- Scans OpenStreetMap for real local business data\n- Checks each business for website, phone, digital presence\n- Scores every lead 0-100 based on missing infrastructure\n- Exports clean data ready for your CRM or email tool\n\n**Example output:**\n\n| Business | Address | Missing Website | Score |\n|----------|---------|----------------|-------|\n| Austin Auto Repair | Main St 104, Austin TX | Yes | 85/100 |\n| Hill Country Bakery | Congress Ave 402, Austin TX | Yes | 85/100 |\n\nThose 85+ scores are businesses with zero web presence. They need someone to build them a site.\n\n**[Try LocalGap on Apify](${LOCALGAP_APIFY})** — [product page](${LOCALGAP_SITE})`,
+  },
+  {
+    title: 'Free Apify Actor for Finding Local Businesses Without Websites — Lead Gen Gold',
+    text: `Built this Apify Actor for agency owners and freelancers who sell web design services.\n\n**The problem:** You waste hours looking for businesses that might need a website.\n\n**The solution:** LocalGap scans OpenStreetMap data for any area you target and finds businesses with:\n- No website\n- Unverified phone numbers\n- Weak digital infrastructure\n\nEach lead gets an automated score. 85+ means they have almost zero online presence.\n\n**Use cases:**\n- Agency prospecting — find 100s of leads in minutes\n- Cold email campaigns — only contact businesses that genuinely need help\n- Market research — see which areas are underserved digitally\n- Freelance outreach — target businesses ready to buy\n\nOutput is CRM-ready JSON/CSV/Excel.\n\n**[Run it on Apify](${LOCALGAP_APIFY})**\n\n*[See live demo + full docs](${LOCALGAP_SITE})*`,
+  },
+  {
+    title: 'How I Find High-Converting Agency Leads with This Apify Actor',
+    text: `If you run a web design or digital marketing agency, this is the prospecting tool you need.\n\n**LocalGap Business Lead Finder** uses OpenStreetMap data to find real local businesses that are missing websites and other digital basics.\n\n**Why it works:**\n- These businesses genuinely need help\n- They're not being bombarded by every agency (most tools don't find them)\n- Lead scores tell you exactly how much they need you\n- Clean export means you can start outreach immediately\n\n**The workflow:**\n1. Pick your target city or area\n2. Run the actor — takes minutes\n3. Filter by lead score (85+ = no website at all)\n4. Export to CSV\n5. Load into your email tool and start reaching out\n\nA business with no website in 2026 is practically asking for help. LocalGap finds them for you.\n\n**[Get started on Apify](${LOCALGAP_APIFY})**\n\n*[Live simulator and full details](${LOCALGAP_SITE})*`,
+  },
+  {
+    title: 'LocalGap Lead Finder — Apify Actor That Scores Local Businesses by Digital Gaps',
+    text: `**What it does:** Scans any area for local businesses and scores them based on missing digital infrastructure (no website, unverified phone, etc.)\n\n**Who it's for:** Agencies, freelancers, cold emailers, lead gen specialists\n\n---\n\n| Feature | Details |\n|---|---|\n| **Data Source** | OpenStreetMap / Overpass API |\n| **Lead Scoring** | 0-100 based on missing website, phone, etc. |\n| **Export Formats** | JSON, CSV, Excel |\n| **Targeting** | City, ZIP code, or GPS coordinates |\n| **Platform** | Apify Store |\n\n**Why this beats other lead tools:**\n- Finds businesses other tools miss (no website = not indexed)\n- Automated scoring saves hours of manual research\n- Real geo data, not scraped directories\n- CRM-ready output\n\nAn 85/100 lead score = a business with no website and no verified phone. That's a sale waiting to happen.\n\n**[Run LocalGap on Apify](${LOCALGAP_APIFY})** | [Product page](${LOCALGAP_SITE})`,
+  },
+  {
+    title: 'Best Apify Actor for Agency Prospecting — LocalGap Finds Businesses Without Websites',
+    text: `Agency owners: stop paying for lead lists full of businesses that already have websites.\n\n**LocalGap** flips the script — it specifically finds businesses that are **missing** digital infrastructure. No website? Unverified phone? That's your next client.\n\n**How it works:**\n- Uses OpenStreetMap's Overpass API for real business data\n- Checks each business for web presence, phone verification, etc.\n- Assigns a lead score from 0-100\n- Exports clean datasets ready for CRM import\n\n**Real output example:**\n- Austin Auto Repair — No website — Score: 85/100\n- Hill Country Bakery — No website — Score: 85/100\n- Lone Star Coffee — Has website — Score: 40/100\n\nFocus on the 85+ scores and your close rate goes way up.\n\n**[Try it on Apify](${LOCALGAP_APIFY})**\n\n*[Full demo and docs](${LOCALGAP_SITE})*`,
+  },
+];
+
 // ─── Bluehost posts ──────────────────────────────────────────────────────────
 
 const BLUEHOST_USE_CASES = ['WordPress blog', 'small business website', 'online store', 'portfolio site', 'membership site', 'affiliate marketing site', 'agency website', 'podcast website'];
@@ -790,11 +821,28 @@ function generateBluehostPost(state) {
   }
 }
 
+function generateLocalGapPost(state) {
+  if (!state.lgPostIndex) state.lgPostIndex = 0;
+  const post = LOCALGAP_POSTS[state.lgPostIndex % LOCALGAP_POSTS.length];
+  state.lgPostIndex++;
+  console.log(`Generating LocalGap post #${state.lgPostIndex}...`);
+  return {
+    ...post,
+    commentLink: LOCALGAP_APIFY,
+    flair: 'Tool',
+    type: 'localgap',
+    platform: 'localgap'
+  };
+}
+
+// LocalGap gets heavy rotation — every other post
+const PLATFORM_ROTATION_V2 = ['localgap', 'apilayer', 'localgap', 'bluehost', 'localgap', 'apify'];
+
 async function generatePost(state, index) {
   const totalIndex = (state.postCount || 0) + (index || 0);
-  const platform = PLATFORM_ROTATION[totalIndex % PLATFORM_ROTATION.length];
+  const platform = PLATFORM_ROTATION_V2[totalIndex % PLATFORM_ROTATION_V2.length];
   console.log(`Platform: ${platform}`);
-  // apilayer, bluehost, apify only
+  if (platform === 'localgap') return generateLocalGapPost(state);
   if (platform === 'bluehost') return generateBluehostPost(state);
   if (platform === 'base44') return generateBase44Post(state);
   if (platform === 'apilayer') return generateAPILayerPost(state);
@@ -838,7 +886,10 @@ async function main() {
       if (result.thingName && post.commentLink) {
         await sleep(3000);
         let commentText;
-        if (post.platform === 'apilayer') {
+        if (post.platform === 'localgap') {
+          commentText = `**Try it free:** ${LOCALGAP_APIFY}\n\n` +
+            `*[Full product page + live simulator](${LOCALGAP_SITE}) — LocalGap finds local businesses without websites so you can sell them one.*`;
+        } else if (post.platform === 'apilayer') {
           commentText = `**Direct link:** ${post.commentLink}\n\n` +
             `*[APILayer](${APILAYER_SIGNUP}) — 40+ production-ready APIs, one account, one key. Free to start.*`;
         } else if (post.platform === 'bluehost') {
