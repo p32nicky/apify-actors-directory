@@ -17,6 +17,8 @@ const BASE44_LINK = 'https://base44.pxf.io/c/2252709/2049275/25619?trafcat=base'
 const BLUEHOST_LINK = 'https://bluehost.sjv.io/5k0d52';
 const LOCALGAP_APIFY = 'https://apify.com/fine_lingo/local-gap-leads-actor';
 const LOCALGAP_SITE = 'https://localleadapi.netlify.app/';
+const ENRICHER_APIFY = 'https://apify.com/fine_lingo/localgap-lead-enricher';
+const ATS_APIFY = 'https://apify.com/fine_lingo/ats-jobs-harvester';
 
 // ─── Base44 product info (real data from base44.com) ─────────────────────────
 const BASE44_FEATURES = [
@@ -753,6 +755,40 @@ const LOCALGAP_POSTS = [
   },
 ];
 
+// ─── Lead Enricher posts ────────────────────────────────────────────────────
+
+const ENRICHER_POSTS = [
+  {
+    title: 'LocalGap Lead Enricher — Apify Actor for B2B Lead Enrichment with Tech Stack Detection',
+    text: `**LocalGap Lead Enricher** takes raw company data and enriches it with tech stacks, social handles, company size tiers, and contact points.\n\n**What it does:**\n- Multi-source business discovery from search inputs or seed lists\n- Automated tech stack detection (CMS, frameworks, analytics, marketing pixels)\n- Digital presence gap analysis with scoring\n- Full enrichment: social handles, company size, contact info\n\n**Use cases:**\n- Outbound sales — know what tech your prospects use before reaching out\n- Agency prospecting — find businesses with gaps in their digital stack\n- Recruitment — identify companies by their tech choices\n- Market research — map technology adoption in any vertical\n\nFully optimized for Apify's Actor SDK with clean dataset output.\n\n**[Try Lead Enricher on Apify](${ENRICHER_APIFY})**`,
+  },
+  {
+    title: 'Enrich Your Lead Lists with Tech Stacks, Social Handles & Company Data — Apify Actor',
+    text: `If you're doing outbound sales or agency prospecting, raw lead lists aren't enough. You need context.\n\n**LocalGap Lead Enricher** takes your target companies and returns:\n- **Tech stack** — what CMS, frameworks, analytics, and pixels they run\n- **Social handles** — find their LinkedIn, Twitter, Facebook\n- **Company size tiers** — segment by company scale\n- **Contact points** — direct outreach data\n- **Gap analysis scores** — how weak their digital presence is\n\nFeed it domains or business names. Get back enriched, CRM-ready data.\n\nPerfect companion to the [LocalGap Lead Finder](${LOCALGAP_APIFY}) — find the leads, then enrich them.\n\n**[Run Lead Enricher on Apify](${ENRICHER_APIFY})**`,
+  },
+  {
+    title: 'Free Apify Actor for Tech Stack Detection & Lead Enrichment',
+    text: `Built this for anyone doing B2B sales intelligence.\n\n**LocalGap Lead Enricher** scans target businesses and returns:\n\n| Data Point | Example |\n|---|---|\n| Tech Stack | WordPress, Google Analytics, Mailchimp |\n| Social Handles | LinkedIn, Twitter, Facebook URLs |\n| Company Size | SMB / Mid-Market / Enterprise |\n| Digital Gaps | Missing SSL, no analytics, outdated CMS |\n| Contact Points | Email, phone, social DMs |\n\n**Why it matters:** Knowing a prospect's tech stack before you reach out = way higher conversion. If they're running a 2015 WordPress theme with no analytics, they need help.\n\nWorks great paired with the LocalGap Lead Finder for a full prospecting pipeline.\n\n**[Try it on Apify](${ENRICHER_APIFY})**`,
+  },
+];
+
+// ─── ATS Jobs Harvester posts ───────────────────────────────────────────────
+
+const ATS_POSTS = [
+  {
+    title: 'ATS Jobs Harvester — Scrape Job Listings from Greenhouse, Lever, Ashby & More',
+    text: `**ATS Jobs Harvester** pulls job listings directly from company career platforms — no expensive job board scraping needed.\n\n**Supported platforms:**\n- Greenhouse\n- Lever\n- Ashby\n- SmartRecruiters\n- Workable\n- BambooHR\n- Recruitee\n- JSON-LD schema\n\n**Key features:**\n- **Domain-in input** — just enter company domains (stripe.com, figma.com)\n- **Auto-ATS detection** — identifies which platform a company uses\n- **Full filtering** — keyword, department, location, remote, salary, recency\n- **Deep enrichment** — seniority tagging, tech stack extraction\n- **Hiring signals** — department breakdowns and hiring velocity\n- **Alerts** — Slack and Discord webhook notifications\n\n**Use cases:**\n- Recruiters monitoring target companies\n- B2B sales — hiring signals = budget signals\n- Job seekers tracking specific companies\n- Market research on hiring trends\n\n**[Run ATS Harvester on Apify](${ATS_APIFY})**`,
+  },
+  {
+    title: 'Monitor Any Company\'s Hiring — Apify Actor That Scrapes 8 ATS Platforms Automatically',
+    text: `Want to know when Stripe, Figma, or any company posts a new role? This Apify Actor does it automatically.\n\n**ATS Jobs Harvester** takes company domains as input, auto-detects their ATS platform, and pulls every job listing via native JSON APIs — no DOM scraping, no rate limits.\n\n**What you get per listing:**\n- Job title, department, location\n- Remote status and salary (when available)\n- Seniority level (Executive, Director, Senior, IC)\n- Tech stack mentions (AWS, Salesforce, React, Python, etc.)\n- Company hiring velocity and department breakdown\n\n**Filtering:**\n- Keywords (include/exclude)\n- Department, location, remote only\n- Minimum salary\n- Days since posted\n\n**Alerts:** Get Slack or Discord notifications when target roles appear.\n\nPerfect for recruiters, sales teams (hiring = buying signals), and job seekers.\n\n**[Try it on Apify](${ATS_APIFY})**`,
+  },
+  {
+    title: 'Best Apify Actor for Recruiting Intelligence — ATS Jobs Harvester Covers 8 Platforms',
+    text: `If you're in recruiting or B2B sales, company hiring data is gold. This actor gets it from the source.\n\n**ATS Jobs Harvester** queries native ATS APIs directly:\n\n| Platform | Detection | Method |\n|----------|-----------|--------|\n| Greenhouse | Auto | JSON API |\n| Lever | Auto | JSON API |\n| Ashby | Auto | JSON API |\n| SmartRecruiters | Auto | JSON API |\n| Workable | Auto | JSON API |\n| BambooHR | Auto | JSON API |\n| Recruitee | Auto | JSON API |\n| JSON-LD | Auto | Schema parse |\n\n**Why this beats job board scraping:**\n- Direct from ATS = more accurate, faster\n- No proxy costs or CAPTCHA issues\n- Real-time data, not cached aggregations\n- Enrichment built in (seniority, tech stack)\n\nJust feed it domains. It handles detection and extraction.\n\n**[Run ATS Harvester on Apify](${ATS_APIFY})**`,
+  },
+];
+
 // ─── Bluehost posts ──────────────────────────────────────────────────────────
 
 const BLUEHOST_USE_CASES = ['WordPress blog', 'small business website', 'online store', 'portfolio site', 'membership site', 'affiliate marketing site', 'agency website', 'podcast website'];
@@ -835,14 +871,48 @@ function generateLocalGapPost(state) {
   };
 }
 
-// LocalGap gets heavy rotation — every other post
-const PLATFORM_ROTATION_V2 = ['localgap', 'apilayer', 'localgap', 'bluehost', 'localgap', 'apify'];
+function generateEnricherPost(state) {
+  if (!state.enricherPostIndex) state.enricherPostIndex = 0;
+  const post = ENRICHER_POSTS[state.enricherPostIndex % ENRICHER_POSTS.length];
+  state.enricherPostIndex++;
+  console.log(`Generating Enricher post #${state.enricherPostIndex}...`);
+  return {
+    ...post,
+    commentLink: ENRICHER_APIFY,
+    flair: 'Tool',
+    type: 'enricher',
+    platform: 'enricher'
+  };
+}
+
+function generateATSPost(state) {
+  if (!state.atsPostIndex) state.atsPostIndex = 0;
+  const post = ATS_POSTS[state.atsPostIndex % ATS_POSTS.length];
+  state.atsPostIndex++;
+  console.log(`Generating ATS post #${state.atsPostIndex}...`);
+  return {
+    ...post,
+    commentLink: ATS_APIFY,
+    flair: 'Tool',
+    type: 'ats',
+    platform: 'ats'
+  };
+}
+
+// Own actors get heavy rotation — 6 out of 10 posts are ours
+const PLATFORM_ROTATION_V2 = [
+  'localgap', 'apilayer', 'enricher', 'bluehost',
+  'ats', 'apify', 'localgap', 'enricher',
+  'ats', 'localgap',
+];
 
 async function generatePost(state, index) {
   const totalIndex = (state.postCount || 0) + (index || 0);
   const platform = PLATFORM_ROTATION_V2[totalIndex % PLATFORM_ROTATION_V2.length];
   console.log(`Platform: ${platform}`);
   if (platform === 'localgap') return generateLocalGapPost(state);
+  if (platform === 'enricher') return generateEnricherPost(state);
+  if (platform === 'ats') return generateATSPost(state);
   if (platform === 'bluehost') return generateBluehostPost(state);
   if (platform === 'base44') return generateBase44Post(state);
   if (platform === 'apilayer') return generateAPILayerPost(state);
@@ -889,6 +959,12 @@ async function main() {
         if (post.platform === 'localgap') {
           commentText = `**Try it free:** ${LOCALGAP_APIFY}\n\n` +
             `*[Full product page + live simulator](${LOCALGAP_SITE}) — LocalGap finds local businesses without websites so you can sell them one.*`;
+        } else if (post.platform === 'enricher') {
+          commentText = `**Try it free:** ${ENRICHER_APIFY}\n\n` +
+            `*LocalGap Lead Enricher — enrich leads with tech stacks, social handles, company size, and contact points. Pairs with [LocalGap Lead Finder](${LOCALGAP_APIFY}).*`;
+        } else if (post.platform === 'ats') {
+          commentText = `**Try it free:** ${ATS_APIFY}\n\n` +
+            `*ATS Jobs Harvester — scrape job listings from Greenhouse, Lever, Ashby & 5 more platforms. Auto-detection, filtering, enrichment, and Slack/Discord alerts.*`;
         } else if (post.platform === 'apilayer') {
           commentText = `**Direct link:** ${post.commentLink}\n\n` +
             `*[APILayer](${APILAYER_SIGNUP}) — 40+ production-ready APIs, one account, one key. Free to start.*`;
